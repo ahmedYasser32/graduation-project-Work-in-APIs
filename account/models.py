@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
-
+'''
 class MyAccountManager(BaseUserManager):
 	def create_user(self, email, username, password=None):
 		if not email:
@@ -84,22 +84,4 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-
-class LocationDetail(models.Model):
-	building_name_number = models.CharField(max_length=40, default="")
-	floor_number = models.CharField(max_length=10, default="")
-	apartmentNumber = models.CharField(max_length=10, default="")
-	longitude = models.DecimalField(max_digits=12, decimal_places=10, default=0)
-	latitude = models.DecimalField(max_digits=12, decimal_places=10, default=0)
-
-
-class Location(models.Model):
-	user = models.OneToOneField(Account, on_delete=models.CASCADE)
-	location = models.ManyToManyField(LocationDetail)
-
-class PhoneDetail(models.Model):
-	phone = models.CharField(max_length=13, default='')
-
-class Phone(models.Model):
-	user = models.OneToOneField(Account, on_delete=models.CASCADE)
-	phone = models.ManyToManyField(PhoneDetail)
+'''
