@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-
+from django_countries.fields import CountryField
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -38,6 +38,8 @@ class MyAccountManager(BaseUserManager):
 class Account(AbstractBaseUser):
 	email                   = models.EmailField(verbose_name="email", max_length=60, unique=True)
 	username 				= None
+	firstname               = models.CharField(max_length=150)
+	lastname                = models.CharField(max_length=150)
 	date_joined				= models.DateTimeField(verbose_name='date joined', auto_now_add=True)
 	last_login				= models.DateTimeField(verbose_name='last login', auto_now=True)
 	is_admin				= models.BooleanField(default=False)
@@ -69,3 +71,87 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 	if created:
 		Token.objects.create(user=instance)
 
+'''
+Data
+4- number
+5- career level(student-entery level -junior-senior-management)
+6-type of job(full time - half time -intership-shift based - working from home -volunteering)
+7-job careers interested in (software engineering-translation- architecture-design )
+
+8-job title looking for(android developer-ux designer-ui designer- frontend developer)
+
+9- min salary
+10-skills
+11-birthdate(days- months-years)
+12-gender
+13- nationality (magmo3et belad 7elwa keda )
+14-location ( country-city - area) zy ely ableha
+15- years of experience
+16- current education level( student- bachelor-under grad-master’s-phd)
+17- field of study (computer science-engineering- fine arts-arts)
+18- uni
+19- year of grad (years)
+20- gpa
+21- languages ( arabic - English-french - german- spanish - italian - Chinese )
+
+'''
+
+class Profile(models.Model):
+
+    User = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
+
+    career_level = [("ST","Student"),("EL","Entrylevel"),("JR","Junior")
+		           ,("Sr","Senior"),("MGT","Management")]
+
+	job_Types   = [("FT","Full time"),("HT","Half time"),
+				   ("IN","Intership"),("SB","Shift based"),("WFH","Work from home")
+	               ("VN","Volunteering")]
+
+	Intrested_Careers = [("SE","Software Engineering"),("ARCH","Architecture")
+		       ,("TR","Translation"),("DES","Design")]
+
+	genders=[("M","Male"),("F","Female")]
+
+	Education_level = [("ST","Student"),("BCH","Bachelor"),("UG","UnderGrad"),("MST","Masters"),("PHD","PHD")]
+
+	Study_Field =[("Cs","Computer Science"),("ENG","Engineering"),("FA","Fine Arts"),("AS","Arts")]
+
+	langs =[("DU","Deutsch"),("FR","French"),("En","English"),("AR","Arabic")]
+
+	number = models.CharField(max_length=13)
+
+
+    CareerLevel = models.CharField(max_length=11,
+           choices=career_level,)
+
+	JobTypes = models.CharField(max_length=20,
+           choices=Job_Types,)
+
+	CareersIntrestedin = models.CharField(max_length=25,
+           choices=Intrested_Careers,)
+
+	MinSalary =models.PositiveIntegerField(max_length=7)
+
+	skills=models.CharField(max_length=200)
+
+	birthdate = models.DateTimeField()
+
+	Gender = models.CharField(max_length=15,
+							  choices=genders,)
+
+	Location=models.CharField(max_length=50)
+
+	YearsofExperience=models.PositiveIntegerField(max_length=2)
+
+	EducationLevel = models.CharField(max_length=15,
+							  choices=Education_level)
+
+	StudyFields     = models.CharField(max_length=15,
+					choices=Study_Field)
+
+	Uni = models.CharField(max_length=200)
+
+	Gpa = models.CharField(max_length=2)
+
+   languages= models.CharField(max_length=20,
+							   choices=langs)
