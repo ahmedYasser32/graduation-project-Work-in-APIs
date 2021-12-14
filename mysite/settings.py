@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'account.Account'
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.AllowAllUsersModelBackend',
-    'account.backends.CaseInsensitiveModelBackend',
+    'account.backends.EmailModelBackend',
     )
 
 REST_FRAMEWORK = {
