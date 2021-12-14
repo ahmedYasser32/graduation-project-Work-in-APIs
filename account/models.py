@@ -9,25 +9,25 @@ from rest_framework.authtoken.models import Token
 
 
 class MyAccountManager(BaseUserManager):
-  def create_user(self, email, password=None):
+	def create_user(self, email, password=None):
 		if not email:
 			raise ValueError('Users must have an email address')
 
 
 		user = self.model(
 			email=self.normalize_email(email),
-        )
+		)
 
-	    user.set_password(password)
-	    user.save(using=self._db)
-        return user
+		user.set_password(password)
+		user.save(using=self._db)
+		return user
 
 
- def create_superuser(self, email, password):
+	def create_superuser(self, email, password):
 		user = self.create_user(
 			email=self.normalize_email(email),
 			password=password,
-        )
+		)
 		user.is_admin = True
 		user.is_staff = True
 		user.is_superuser = True
@@ -51,13 +51,7 @@ class Account(AbstractBaseUser):
 	REQUIRED_FIELDS = []
 
 	objects = MyAccountManager()
-'''
-	def save(self, *args, **kwargs):
-		first_char = self.username.__str__()[0]
-		self.image = f'/static/img/{first_char}.png'
-		super(Account, self).save(*args, **kwargs)
-'''
-    def __str__(self):
+	def __str__(self):
 		return self.email
 
 
@@ -70,8 +64,8 @@ class Account(AbstractBaseUser):
 		return True
 
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+	@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+	def create_auth_token(sender, instance=None, created=False, **kwargs):
+		if created:
+			Token.objects.create(user=instance)
 
