@@ -13,7 +13,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 		}
 
 
-	def	save(self):
+	def	save(self) :
 
 		account = Account(
 					email=self.validated_data['email'],

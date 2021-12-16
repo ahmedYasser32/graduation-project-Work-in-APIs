@@ -104,6 +104,7 @@ class Profile(models.Model):
 	career_level_choices = [("ST","Student"),("EL","Entrylevel"),("JR","Junior")
 		,("Sr","Senior"),("MGT","Management")]
 	job_types_choices   = [("FT","Full time"),("HT","Half time"),("IN","Intership"),("SB","Shift based"),("WFH","Work from home"),("VN","Volunteering")]
+
 	intrested_careers_choices = [("SE","Software Engineering"),("ARCH","Architecture")
 		,("TR","Translation"),("DES","Design")]
 	genders_choices=[("M","Male"),("F","Female")]

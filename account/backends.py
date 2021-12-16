@@ -3,10 +3,10 @@ from django.contrib.auth.backends import ModelBackend
 
 
 class EmailModelBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(self, request, email=None, password=None, **kwargs):
         UserModel = get_user_model()
         try:
-            user = UserModel.objects.get(email__iexact=username)
+            user = UserModel.objects.get(email__iexact=email)
         except UserModel.DoesNotExist:
             return None
         else:

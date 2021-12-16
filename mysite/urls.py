@@ -22,6 +22,6 @@ from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    #path('accounts/', include('account.urls')),
+    path('account/', include('account.urls')),
 ]
 
