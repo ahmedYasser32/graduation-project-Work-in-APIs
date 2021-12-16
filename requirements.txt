@@ -26,7 +26,7 @@ django-cors-headers==3.7.0
 django-heroku==0.3.1
 django-redis==5.0.0
 djangorestframework==3.12.4
-gunicorn==20.1.0
+gunicorn
 hiredis==2.0.0
 hyperlink==21.0.0
 idna==2.10
