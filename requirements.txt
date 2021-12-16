@@ -55,7 +55,7 @@ urllib3==1.26.5
 vine==5.0.0
 wcwidth==0.2.5
 whitenoise==5.2.0
-zope.interface==5.4.0
+
 PyJWT==2.0.0
 apns2
 django-push-notifications==2.0.0
