@@ -1,10 +1,12 @@
+
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django_countries.fields import CountryField
+#from django_countries.fields import CountryField
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+
 
 
 
@@ -98,60 +100,46 @@ Data
 
 class Profile(models.Model):
 
-    User = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
+	User = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
+	career_level_choices = [("ST","Student"),("EL","Entrylevel"),("JR","Junior")
+		,("Sr","Senior"),("MGT","Management")]
+	job_types_choices   = [("FT","Full time"),("HT","Half time"),("IN","Intership"),("SB","Shift based"),("WFH","Work from home"),("VN","Volunteering")]
+	intrested_careers_choices = [("SE","Software Engineering"),("ARCH","Architecture")
+		,("TR","Translation"),("DES","Design")]
+	genders_choices=[("M","Male"),("F","Female")]
 
-    career_level = [("ST","Student"),("EL","Entrylevel"),("JR","Junior")
-		           ,("Sr","Senior"),("MGT","Management")]
+	education_level_choices = [("ST","Student"),("BCH","Bachelor"),("UG","UnderGrad"),("MST","Masters"),("PHD","PHD")]
 
-	job_Types   = [("FT","Full time"),("HT","Half time"),
-				   ("IN","Intership"),("SB","Shift based"),("WFH","Work from home")
-	               ("VN","Volunteering")]
-
-	Intrested_Careers = [("SE","Software Engineering"),("ARCH","Architecture")
-		       ,("TR","Translation"),("DES","Design")]
-
-	genders=[("M","Male"),("F","Female")]
-
-	Education_level = [("ST","Student"),("BCH","Bachelor"),("UG","UnderGrad"),("MST","Masters"),("PHD","PHD")]
-
-	Study_Field =[("Cs","Computer Science"),("ENG","Engineering"),("FA","Fine Arts"),("AS","Arts")]
+	study_Field_choices =[("Cs","Computer Science"),("ENG","Engineering"),("FA","Fine Arts"),("AS","Arts")]
 
 	langs =[("DU","Deutsch"),("FR","French"),("En","English"),("AR","Arabic")]
 
-	number = models.CharField(max_length=13)
+	phone_number = models.CharField(max_length=13)
 
+	career_level = models.CharField(max_length=11,choices=career_level_choices,)
 
-    CareerLevel = models.CharField(max_length=11,
-           choices=career_level,)
+	job_types = models.CharField(max_length=20,choices=job_types_choices,)
 
-	JobTypes = models.CharField(max_length=20,
-           choices=Job_Types,)
+	careers_intrests = models.CharField(max_length=25,choices=intrested_careers_choices,)
 
-	CareersIntrestedin = models.CharField(max_length=25,
-           choices=Intrested_Careers,)
-
-	MinSalary =models.PositiveIntegerField(max_length=7)
+	min_salary =models.PositiveIntegerField()
 
 	skills=models.CharField(max_length=200)
 
 	birthdate = models.DateTimeField()
 
-	Gender = models.CharField(max_length=15,
-							  choices=genders,)
+	gender = models.CharField(max_length=15,choices=genders_choices,)
 
 	Location=models.CharField(max_length=50)
 
-	YearsofExperience=models.PositiveIntegerField(max_length=2)
+	years_of_experience=models.PositiveIntegerField()
 
-	EducationLevel = models.CharField(max_length=15,
-							  choices=Education_level)
+	education_level = models.CharField(max_length=15,choices=education_level_choices)
 
-	StudyFields     = models.CharField(max_length=15,
-					choices=Study_Field)
+	study_fields     = models.CharField(max_length=15,choices=study_Field_choices)
 
-	Uni = models.CharField(max_length=200)
+	uni = models.CharField(max_length=200)
 
-	Gpa = models.CharField(max_length=2)
+	gpa = models.CharField(max_length=2)
 
-   languages= models.CharField(max_length=20,
-							   choices=langs)
+	languages= models.CharField(max_length=20,choices=langs)
