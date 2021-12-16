@@ -70,6 +70,8 @@ class LoginAPI(APIView):
                 context['is_verified'] = account.verified
                 context['firstname'] = account.firstname
                 context['lastname'] = account.lastname
+                print(account)
+                print(context)
                 return Response(data=context)
             context['response'] = 'Error'
             context['error_message'] = 'Invalid credentials'

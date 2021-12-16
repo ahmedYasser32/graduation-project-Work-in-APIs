@@ -103,26 +103,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-if os.environ.get('ENV') == 'PRODUCTION':
-    # ...
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('NAME'),
-            'USER': os.environ.get('USER'),
-            'PASSWORD': os.environ.get('PASSWORD'),
-            'HOST': '',
-            'PORT': 5432
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
+}
 
 
 # Password validation
