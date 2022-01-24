@@ -1,7 +1,6 @@
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-#from django_countries.fields import CountryField
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -101,6 +100,8 @@ Data
 class Profile(models.Model):
 
 	User = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
+
+
 	career_level_choices = [("ST","Student"),("EL","Entrylevel"),("JR","Junior")
 		,("Sr","Senior"),("MGT","Management")]
 	job_types_choices   = [("FT","Full time"),("HT","Half time"),("IN","Intership"),("SB","Shift based"),("WFH","Work from home"),("VN","Volunteering")]

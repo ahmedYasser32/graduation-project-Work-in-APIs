@@ -24,5 +24,17 @@ from django.urls import path
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     path('api/account/', include('account.urls')),
+    path('api/company/', include('companies.urls')),
 ]
 
+'''API DOC
+user login/logut
+[api][account][Register]
+[api][account][Login]
+
+
+company login/logout
+[api][company][Register]
+[api][company][Login]
+
+'''
