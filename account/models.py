@@ -130,7 +130,7 @@ class Profile(models.Model):
 
 	birthdate = models.DateTimeField()
 
-	gender = models.CharField(max_length=15,choices=genders_choices,)
+	gender = models.CharField(max_length=15,choices=genders_choices)
 
 	Location=models.CharField(max_length=50)
 

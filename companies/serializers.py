@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from companies.models import Account
+from companies.models import CompanyAccount
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
 	class Meta:
-		model = Account
+		model = CompanyAccount
 		fields = ['email','company_name', 'firstname', 'lastname', 'password', 'is_staff',  'verified',]
 		extra_kwargs = {
 				'password': {'write_only': True, 'min_length': 8, 'max_length': 50},

@@ -1,10 +1,10 @@
 from django.conf.urls import url
 from django.urls import path, include
-from .views import RegisterAPI, LoginAPI
+from account.views import RegisterAPI, LoginAPI
 
 
 urlpatterns = [
- path('Register/',RegisterAPI.as_view()),
- path('Login/',LoginAPI.as_view()),
+ path('register/',RegisterAPI.as_view()),
+ path('login/',LoginAPI.as_view()),
 ]
 

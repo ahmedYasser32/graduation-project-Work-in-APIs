@@ -1,9 +1,9 @@
 
-from .models import Account
+from account.models import Account
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import RegistrationSerializer
+from account.serializers import RegistrationSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 

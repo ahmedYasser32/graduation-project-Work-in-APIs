@@ -29,12 +29,12 @@ urlpatterns = [
 
 '''API DOC
 user login/logut
-[api][account][Register]
-[api][account][Login]
+[api][account][register]
+[api][account][login]
 
 
 company login/logout
-[api][company][Register]
-[api][company][Login]
+[api][company][register]
+[api][company][login]
 
 '''
