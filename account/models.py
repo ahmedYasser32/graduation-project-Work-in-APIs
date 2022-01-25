@@ -108,6 +108,7 @@ class Profile(models.Model):
 
 	intrested_careers_choices = [("SE","Software Engineering"),("ARCH","Architecture")
 		,("TR","Translation"),("DES","Design")]
+
 	genders_choices=[("M","Male"),("F","Female")]
 
 	education_level_choices = [("ST","Student"),("BCH","Bachelor"),("UG","UnderGrad"),("MST","Masters"),("PHD","PHD")]
@@ -130,9 +131,9 @@ class Profile(models.Model):
 
 	birthdate = models.DateTimeField()
 
-	gender = models.CharField(max_length=15,choices=genders_choices)
+	gender = models.CharField(max_length=15,choices=genders_choices,default="")
 
-	Location=models.CharField(max_length=50)
+	location=models.CharField(max_length=50)
 
 	years_of_experience=models.PositiveIntegerField()
 

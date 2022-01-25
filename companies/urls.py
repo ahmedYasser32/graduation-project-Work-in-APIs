@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from django.urls import path, include
-from .views import RegisterAPI, LoginAPI
+from companies.views import Company_RegisterAPI, Company_LoginAPI
 urlpatterns = [
- path('register/',RegisterAPI.as_view()),
- path('login/',LoginAPI.as_view()),
+ path('register/',Company_RegisterAPI.as_view()),
+ path('login/',Company_LoginAPI.as_view()),
 ]
+

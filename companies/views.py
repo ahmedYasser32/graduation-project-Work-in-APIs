@@ -1,14 +1,14 @@
 from django.shortcuts import render
-from .models import CompanyAccount
+from companies.models import CompanyAccount
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import RegistrationSerializer
+from companies.serializers import RegistrationSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
 # Register API
-class RegisterAPI(APIView):
+class Company_RegisterAPI(APIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = RegistrationSerializer
@@ -20,7 +20,7 @@ class RegisterAPI(APIView):
 
        #check email if already exist send error
 
-        if Account.objects.filter(email=email).count()>0:
+        if CompanyAccount.objects.filter(email=email).count()>0:
             context['error_message'] = 'That email is already in use.'
             context['response'] = 'error'
             return Response(data=context)
@@ -50,7 +50,7 @@ class RegisterAPI(APIView):
 
 
 
-class LoginAPI(APIView):
+class Company_LoginAPI(APIView):
     authentication_classes = []
     permission_classes = []
 

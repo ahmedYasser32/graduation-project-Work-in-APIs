@@ -15,11 +15,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 	def	save(self) :
 
-		account = Account(
+		account = CompanyAccount(
 			email=self.validated_data['email'],
 			firstname=self.validated_data['firstname'],
 			lastname=self.validated_data['lastname'],
-			companyname=self.validates_data['company_name'],
+			company_name=self.validated_data['company_name'],
 				)
 		password = self.validated_data['password']
 		account.set_password(password)
