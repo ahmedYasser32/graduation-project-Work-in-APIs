@@ -1,4 +1,4 @@
-from rest_framework import serializers
+"""from rest_framework import serializers
 
 from companies.models import CompanyAccount
 
@@ -26,3 +26,4 @@ class RegistrationSerializer(serializers.ModelSerializer):
 		account.save()
 		return account
 
+"""

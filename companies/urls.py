@@ -1,4 +1,4 @@
-from django.conf.urls import url
+"""from django.conf.urls import url
 from django.urls import path, include
 from companies.views import Company_RegisterAPI, Company_LoginAPI
 urlpatterns = [
@@ -6,3 +6,4 @@ urlpatterns = [
  path('login/',Company_LoginAPI.as_view()),
 ]
 
+"""

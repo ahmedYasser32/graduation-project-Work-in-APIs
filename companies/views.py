@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from companies.models import CompanyAccount
+"""from django.shortcuts import render
+    from companies.models import CompanyAccount
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -80,3 +80,4 @@ class Company_LoginAPI(APIView):
         return Response(data=context)
 
 
+"""

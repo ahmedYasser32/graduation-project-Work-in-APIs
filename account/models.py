@@ -43,6 +43,8 @@ class Account(AbstractBaseUser):
 	lastname                = models.CharField(max_length=150)
 	date_joined				= models.DateTimeField(verbose_name='date joined', auto_now_add=True)
 	last_login				= models.DateTimeField(verbose_name='last login', auto_now=True)
+	#add boolean field to differentiate between users and companies
+	is_company				= models.BooleanField(default=False)
 	is_admin				= models.BooleanField(default=False)
 	is_active				= models.BooleanField(default=True)
 	is_staff				= models.BooleanField(default=False)
