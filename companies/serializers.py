@@ -1,13 +1,13 @@
-"""from rest_framework import serializers
+from rest_framework import serializers
 
-from companies.models import CompanyAccount
+from account.models import Account
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
 	class Meta:
-		model = CompanyAccount
-		fields = ['email','company_name', 'firstname', 'lastname', 'password', 'is_staff',  'verified',]
+		model = Account
+		fields = ['email', 'firstname', 'lastname', 'password', 'is_staff',  'verified','is_company','company_name']
 		extra_kwargs = {
 				'password': {'write_only': True, 'min_length': 8, 'max_length': 50},
 		}
@@ -15,7 +15,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 	def	save(self) :
 
-		account = CompanyAccount(
+		account = Account(
 			email=self.validated_data['email'],
 			firstname=self.validated_data['firstname'],
 			lastname=self.validated_data['lastname'],
@@ -26,4 +26,3 @@ class RegistrationSerializer(serializers.ModelSerializer):
 		account.save()
 		return account
 
-"""

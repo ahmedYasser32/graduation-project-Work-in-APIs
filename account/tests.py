@@ -9,11 +9,20 @@ from account.models import Account
 # Create your tests here.
 
 class RegistirationTestCase(APITestCase):
+
     def test_registiration(self):
         data={"email":"test@localhost.app","firstname":"test",
           "lastname":"case", "password":"some_strng_pass","is_staff":"false","verified":"false"}
 
-        response = self.client.post("api/account/register/",data)
+        response = self.client.post("/api/account/register/",data)
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, 200)
+
+    def test_company_login(self):
+        data={"email":"test@localhost.app",
+          "password":"some_strng_pass"}
+
+        response = self.client.post("/api/account/login/",data)
+
+        self.assertEqual(response.status_code, 200)
 

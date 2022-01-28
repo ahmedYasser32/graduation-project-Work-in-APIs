@@ -1,5 +1,5 @@
-"""from django.shortcuts import render
-    from companies.models import CompanyAccount
+from django.shortcuts import render
+from account.models import Account
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,13 +15,20 @@ class Company_RegisterAPI(APIView):
 
     def post(self, request, *args, **kwargs):
         context = {}
-        email = request.data.get('email').lower()
+        context['is_company']=True
+        email        = request.data.get('email').lower()
+        company_name = request.data.get('company_name')
 
 
        #check email if already exist send error
 
-        if CompanyAccount.objects.filter(email=email).count()>0:
+        if Account.objects.filter(email=email).count()>0:
             context['error_message'] = 'That email is already in use.'
+            context['response'] = 'error'
+            return Response(data=context)
+
+        if Account.objects.filter(company_name=company_name).count()>0:
+            context['error_message'] = 'That company name is already in use.'
             context['response'] = 'error'
             return Response(data=context)
 
@@ -79,5 +86,3 @@ class Company_LoginAPI(APIView):
         context['error_message'] = 'Invalid credentials'
         return Response(data=context)
 
-
-"""
