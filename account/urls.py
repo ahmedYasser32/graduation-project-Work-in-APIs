@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.urls import path, include
-from account.views import RegisterAPI, LoginAPI
+from account.views import *
 
 
 urlpatterns = [
