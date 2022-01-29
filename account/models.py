@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from datetime import datetime
-
+import math,random
 
 
 
@@ -53,12 +53,26 @@ class Account(AbstractBaseUser):
 	verified                = models.BooleanField(default=False)
 
 
+
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = []
 
 	objects = MyAccountManager()
 	def __str__(self):
 		return self.email
+
+	def verify(self):
+
+		email =self.email
+
+		digits = "0123456789"
+		OTP = ""
+		for i in range(4):
+			OTP += digits[math.floor(random.random() * 10)]
+
+		codes = AccountCode.objects.filter(user= account.pk)
+
+
 
 
 	# For checking permissions. to keep it simple all admin have ALL permissons
@@ -79,15 +93,16 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 class AccountCode(models.Model):
-	user = models.OneToOneField(Account, on_delete=models.CASCADE)
-	reset_password = models.CharField(max_length=6, default='******', blank=True)
-	resend_count = models.PositiveSmallIntegerField(default=0, blank=True)
-	date = models.DateTimeField(blank=True, default=datetime.now)
-	date2 = models.DateTimeField(blank=True, default=datetime.now)
-	date3 = models.DateTimeField(blank=True, default=datetime.now)
-	block = models.BooleanField(blank=True, default=False)
-	freeze = models.BooleanField(blank=True, default=False)
-	foul_count = models.PositiveSmallIntegerField(blank=True, default=0)
+	user              = models.OneToOneField(Account, on_delete=models.CASCADE)
+	verification_code = models.CharField(max_length=4, default='****')
+	reset_password    = models.CharField(max_length=6, default='******', blank=True)
+	resend_count      = models.PositiveSmallIntegerField(default=0, blank=True)
+	date              = models.DateTimeField(blank=True, default=datetime.now)
+	date2             = models.DateTimeField(blank=True, default=datetime.now)
+	date3             = models.DateTimeField(blank=True, default=datetime.now)
+	block             = models.BooleanField(blank=True, default=False)
+	freeze            = models.BooleanField(blank=True, default=False)
+	foul_count        = models.PositiveSmallIntegerField(blank=True, default=0)
 
 
 	def renew_reset_password(self):

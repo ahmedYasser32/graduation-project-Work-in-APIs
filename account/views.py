@@ -1,4 +1,4 @@
-from account.models import Account
+from account.models import Account,AccountCode
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -248,6 +248,7 @@ def reset_password(request, token):
 		data['error_msg'] = "Account does not exist"
 		return Response(data)
 
+
 	key = b'TQXelGorbDLwLdhklkXcDpySpMiW8jHuMzw3tpH-gok='
 	token = encription(token, 'd', key)
 	account_token = Token.objects.get(user=account).key
@@ -275,8 +276,15 @@ def reset_password(request, token):
 			data['error_msg'] = 'Passwords must match.'
 			return Response(data)
 
+
 		account.set_password(password)
 		account.save()
-		data['response']= 'success'
+		data['response'] = 'success'
+
+		#codes = AccountCode.objects.filter(user=account.pk)
+	    #if codes.count()>0:
+		#	codes[0].
+
 		return Response(data)
+
 
