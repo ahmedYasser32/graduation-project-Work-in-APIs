@@ -1,10 +1,10 @@
-
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from datetime import datetime
 
 
 
@@ -74,6 +74,30 @@ class Account(AbstractBaseUser):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
 	if created:
 		Token.objects.create(user=instance)
+
+
+
+
+class AccountCode(models.Model):
+	user = models.OneToOneField(Account, on_delete=models.CASCADE)
+	reset_password = models.CharField(max_length=6, default='******', blank=True)
+	resend_count = models.PositiveSmallIntegerField(default=0, blank=True)
+	date = models.DateTimeField(blank=True, default=datetime.now)
+	date2 = models.DateTimeField(blank=True, default=datetime.now)
+	date3 = models.DateTimeField(blank=True, default=datetime.now)
+	block = models.BooleanField(blank=True, default=False)
+	freeze = models.BooleanField(blank=True, default=False)
+	foul_count = models.PositiveSmallIntegerField(blank=True, default=0)
+
+
+	def renew_reset_password(self):
+		digits = "0123456789"
+		OTP = ""
+		for i in range(6):
+			OTP += digits[math.floor(random.random() * 10)]
+		self.reset_password = OTP
+		self.save()
+
 
 '''
 Data

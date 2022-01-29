@@ -24,7 +24,7 @@ class CompanyProfile(models.Model):
     company_sizes      = [("SB","Small Business"),("ME","Mid Market enterprise"),("EN","Enterprise")]
 
     #Data
-    #make company starts with lowercase letter
+
     #make company related to Account model
 
     company            = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
