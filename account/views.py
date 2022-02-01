@@ -1,3 +1,4 @@
+from knox.models import AuthToken
 from account.models import Account,AccountCode
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
@@ -45,8 +46,9 @@ class RegisterAPI(APIView):
             context['firstname'] = account.firstname
             context['lastname'] = account.lastname
             context['pk'] = account.pk
-            token = Token.objects.get(user=account).key
-            context['token'] = token
+            token = AuthToken.objects.create(account)
+            print(token)
+            context['token'] = token[1]
             context['is_verified'] = account.verified
             return Response(data=context)
 
