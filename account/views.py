@@ -23,6 +23,8 @@ class RegisterAPI(APIView):
     serializer_class = RegistrationSerializer
 
     def post(self, request, *args, **kwargs):
+        print(request.data)
+        print(request.data.get('email'))
         context = {}
         email = request.data.get('email').lower()
 
