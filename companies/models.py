@@ -15,6 +15,7 @@ from rest_framework.authtoken.models import Token
 #remove class CompanyAccount(AbstractBaseUser):
 
 class CompanyProfile(models.Model):
+
     #Lists of choices
     industries         =  [("T","Tech"),("ARCH","Architecture")
 		,("TR","Translation"),("DES","Design"),("MA","Media and Advertising"),("ME","Medicine")]
@@ -27,14 +28,19 @@ class CompanyProfile(models.Model):
 
     #make company related to Account model
 
-    company            = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
+    user               = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
     #image attribute
     logo               = models.BinaryField(null=True, editable=True)
     content_type       = models.CharField(max_length=256, null=True, help_text='The MIMEType of the file')
+    size_of_company    = models.CharField(max_length=25,choices=company_sizes,)
+    company_name       = models.CharField(max_length=25,null = True)
+
 
     size_of_company    = models.CharField(max_length=25,choices=company_sizes,)
     company_industries = models.CharField(max_length=25,choices=industries,)
     company_type       = models.CharField(max_length=25,choices=company_types,)
+    mobile_number      = models.CharField(max_length=13,null=True)
+    job_title          = models.CharField(max_length=25,null=True)
     no_of_employees    = models.CharField(max_length=9)
     isInternational    = models.BooleanField()
     headquarters       = models.CharField(max_length=30)
