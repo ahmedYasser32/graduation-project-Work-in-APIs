@@ -16,10 +16,10 @@ class RegistirationTestCase(APITestCase):
 
     def test_company_registiration(self):
         data={"email":"tesst@localhosst.app",
-          "password":"some_strng_pass","is_staff":"false"
-            ,"is_verified":"false","is_company":"true"}
+          "password":"some_strng_pass"}
 
         response = self.client.post("/api/company/register/",data)
+        print("registiration one response",response.data)
 
         self.assertEqual(response.status_code, 200)
 

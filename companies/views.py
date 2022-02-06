@@ -17,7 +17,6 @@ class Company_RegisterAPI(APIView):
 
     def post(self, request, *args, **kwargs):
         context = {}
-        context['is_company'] = True
         email                 = request.data.get('email').lower()
 
 
@@ -33,7 +32,9 @@ class Company_RegisterAPI(APIView):
 
 
        # Assign serializer
-        serializer = self.serializer_class(data=request.data)
+        data = request.data.copy()
+        data['is_company'] = True
+        serializer = self.serializer_class(data=data)
 
         if serializer.is_valid():
             #if valid save object and send response
