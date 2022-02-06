@@ -24,7 +24,7 @@ class RegisterAPI(APIView):
 
     def post(self, request, *args, **kwargs):
         print(request.data)
-        print(request.data.get('email'))
+        print(request.data.get('email````'))
         context = {}
         email = request.data.get('email').lower()
 

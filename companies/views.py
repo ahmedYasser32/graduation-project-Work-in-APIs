@@ -60,10 +60,10 @@ class Company_RegisterAPI(APIView):
 
 
 # Register API 2
-class Company_ProfileAPI(APIView):
+class CompanyProfileAPI(APIView):
     authentication_classes     = []
     permission_classes         = []
-    company_serializer         = CompanyProfileSerializer
+    #company_serializer         = CompanyProfileSerializer
 
     def post(self, request, *args, **kwargs):
         context = {}
@@ -74,23 +74,29 @@ class Company_ProfileAPI(APIView):
 
        #check email if already exist send error
 
-        if Account.objects.filter(email=email).count() == 0:
+        if email.count() == 0:
             context['error_message'] = 'Account not found.'
             context['response'] = 'error'
             return Response(data=context)
 
-       if CompanyProfile.objects.filter(company_name=company_name).count()>0:
-           context['error_message'] = 'That company name is already in use.'
-           context['response'] = 'error'
-           return Response(data=context)
+        if CompanyProfile.objects.filter(company_name=company_name).count()>0:
+            context['error_message'] = 'That company name is already in use.'
+            context['response'] = 'error'
+            return Response(data=context)
 
 
        # Assign serializer
-        serializer = self.serializer_class(data=request.data)
+        account = email[0]
+        account.firstname = request.data.get('firstname')
+        account.lastname = request.data.get('lastname')
+        account.save()
+        data = request.data.copy()
+        data['user'] = email.pk
+        serializer = self.serializer_class(data=data)
 
         if serializer.is_valid():
             #if valid save object and send response
-            account = serializer.save()
+            serializer.save()
             context['email'] = account.email
             context['pk'] = account.pk
             token = Token.objects.get(user=account).key
