@@ -8,7 +8,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Account
-		fields = ['email', 'firstname', 'lastname', 'password', 'is_staff',  'verified','is_company','company_name']
+		fields = ['email', 'firstname', 'lastname', 'password', 'is_staff',  'verified','is_company']
 		extra_kwargs = {
 				'password': {'write_only': True, 'min_length': 8, 'max_length': 50},
 		}
@@ -17,11 +17,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 	def	save(self) :
 
 		account = Account(
-			email=self.validated_data['email'],
-			firstname=self.validated_data['firstname'],
-			lastname=self.validated_data['lastname'],
-			company_name=self.validated_data['company_name'],
-				)
+			email=self.validated_data['email'])
 		password = self.validated_data['password']
 		account.set_password(password)
 		account.save()
@@ -31,5 +27,5 @@ class CompanyProfileSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = CompanyProfile
-		fields = all
+		fields = '__all__'
 

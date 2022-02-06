@@ -13,13 +13,13 @@ class Company_RegisterAPI(APIView):
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = RegistrationSerializer
-    # company_serializer         = CompanyProfileSerializer
+
 
     def post(self, request, *args, **kwargs):
         context = {}
         context['is_company'] = True
-        email        = request.data.get('email').lower()
-        # company_name = request.data.get('company_name')
+        email                 = request.data.get('email').lower()
+
 
 
        #check email if already exist send error
@@ -29,10 +29,7 @@ class Company_RegisterAPI(APIView):
             context['response'] = 'error'
             return Response(data=context)
 
-        # if CompanyProfile.objects.filter(company_name=company_name).count()>0:
-        #     context['error_message'] = 'That company name is already in use.'
-        #     context['response'] = 'error'
-        #     return Response(data=context)
+
 
 
        # Assign serializer
@@ -63,12 +60,12 @@ class Company_RegisterAPI(APIView):
 class CompanyProfileAPI(APIView):
     authentication_classes     = []
     permission_classes         = []
-    #company_serializer         = CompanyProfileSerializer
+    serializer_class           = CompanyProfileSerializer
 
     def post(self, request, *args, **kwargs):
         context = {}
-
         email        = request.data.get('email').lower()
+        email        =Account.objects.filter(email=email)
         company_name = request.data.get('company_name')
 
 
@@ -91,18 +88,20 @@ class CompanyProfileAPI(APIView):
         account.lastname = request.data.get('lastname')
         account.save()
         data = request.data.copy()
-        data['user'] = email.pk
+        #set relation
+        data['user'] = account.pk
         serializer = self.serializer_class(data=data)
 
         if serializer.is_valid():
             #if valid save object and send response
             serializer.save()
-            context['email'] = account.email
-            context['pk'] = account.pk
-            token = Token.objects.get(user=account).key
-            context['token'] = token
+            context['email']       = account.email
             context['is_verified'] = account.verified
             context['is_company']  = account.is_company
+            context['firstname']   = account.firstname
+            context['lastname']    = account.lastname
+            #** turn dictioanries into vars and copy values from serailizer
+            context= {**context,**serializer.data.copy()}
             context['response']    = "Success"
 
             return Response(data=context)
@@ -131,12 +130,9 @@ class Company_LoginAPI(APIView):
                 token = Token.objects.create(user=account)
             context['response'] = 'Successfully authenticated.'
             context['pk'] = account.pk
-            context['company_name'] = account.company_name
             context['email'] = email.lower()
             context['token'] = token.key
             context['is_verified'] = account.verified
-            context['firstname'] = account.firstname
-            context['lastname'] = account.lastname
             print(account)
             print(context)
             return Response(data=context)

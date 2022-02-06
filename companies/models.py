@@ -32,19 +32,19 @@ class CompanyProfile(models.Model):
     #image attribute
     logo               = models.BinaryField(null=True, editable=True)
     content_type       = models.CharField(max_length=256, null=True, help_text='The MIMEType of the file')
-    size_of_company    = models.CharField(max_length=25,choices=company_sizes,)
+    size_of_company    = models.CharField(max_length=25,choices=company_sizes,default='SB')
     company_name       = models.CharField(max_length=25,null = True)
 
 
-    size_of_company    = models.CharField(max_length=25,choices=company_sizes,)
-    company_industries = models.CharField(max_length=25,choices=industries,)
-    company_type       = models.CharField(max_length=25,choices=company_types,)
+    size_of_company    = models.CharField(max_length=25,choices=company_sizes,default='SB')
+    company_industries = models.CharField(max_length=25,choices=industries,default='T')
+    company_type       = models.CharField(max_length=25,choices=company_types,default='PRV')
     mobile_number      = models.CharField(max_length=13,null=True)
     job_title          = models.CharField(max_length=25,null=True)
-    no_of_employees    = models.CharField(max_length=9)
-    isInternational    = models.BooleanField()
-    headquarters       = models.CharField(max_length=30)
-    founded_at         = models.DateTimeField()
+    no_of_employees    = models.CharField(max_length=9,null=True)
+    isInternational    = models.BooleanField(null=True)
+    headquarters       = models.CharField(max_length=30,null=True)
+    founded_at         = models.DateTimeField(null=True)
 
     """ #Multiple locations??
     locations = ListCharField(
