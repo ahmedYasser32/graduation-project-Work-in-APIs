@@ -1,3 +1,4 @@
+from mysite.tasks import SendMail
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.conf import settings
@@ -61,13 +62,26 @@ class Account(AbstractBaseUser):
 		return self.email
 
 	def verify(self):
-
 		email =self.email
 
 		digits = "0123456789"
 		OTP = ""
 		for i in range(4):
 			OTP += digits[math.floor(random.random() * 10)]
+			codes = AccountCode.objects.filter(user=self.pk)
+			if codes.count() == 0:
+				codes = AccountCode.objects.create(user=self, verification_code = OTP)
+			else:
+				codes = codes[0]
+				codes.verification_code = OTP
+			codes.save()
+			subject = f'hi {self.firstname}, this mail is for your verification code:'
+			body = f'your verification code code is: {codes.verification_code}'
+			SendMail(subject, body, email).start()
+
+
+
+
 
 		codes = AccountCode.objects.filter(user= account.pk)
 
@@ -93,8 +107,8 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class AccountCode(models.Model):
 	user              = models.OneToOneField(Account, on_delete=models.CASCADE)
-	verification_code = models.CharField(max_length=4, default='****')
-	reset_password    = models.CharField(max_length=6, default='******', blank=True)
+	verification_code = models.CharField(max_length=4, null=False, blank=False)
+	reset_password    = models.CharField(max_length=6, null=False, blank=False)
 	resend_count      = models.PositiveSmallIntegerField(default=0, blank=True)
 	date              = models.DateTimeField(blank=True, default=datetime.now)
 	date2             = models.DateTimeField(blank=True, default=datetime.now)
