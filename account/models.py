@@ -76,14 +76,14 @@ class Account(AbstractBaseUser):
 				codes.verification_code = OTP
 			codes.save()
 			subject = f'hi {self.firstname}, this mail is for your verification code:'
-			body = f'your verification code code is: {codes.verification_code}'
+			body = f'your verification code is: {codes.verification_code}'
 			SendMail(subject, body, email).start()
 
 
 
 
 
-		codes = AccountCode.objects.filter(user= account.pk)
+
 
 
 
