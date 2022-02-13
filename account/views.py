@@ -14,6 +14,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.password_validation import validate_password
 from cryptography.fernet import Fernet
 from mysite.tasks import SendMail
+from rest_framework.permissions import IsAuthenticated
 
 
 # Register API
@@ -90,6 +91,56 @@ class LoginAPI(APIView):
         context['response'] = 'Error'
         context['error_message'] = 'Invalid credentials'
         return Response(data=context)
+
+@api_view(['POST', ])
+@permission_classes([])
+@authentication_classes([])
+@permission_classes([IsAuthenticated])
+def check_verification_mail(request):
+	if request.method == 'POST':
+		data = {}
+		email = request.data.get('email').lower()
+		try:
+			account = Account.objects.get(email=email)
+
+		except Account.DoesNotExist:
+			data['response'] = 'error'
+			data['error_msg'] = "Account does not exist"
+			return Response(data)
+
+
+		request.user.verify()
+
+		data['response'] = 'success'
+		data['email'] = account.email
+		return Response(data)
+
+
+@api_view(['POST', ])
+@permission_classes([])
+@authentication_classes([])
+@permission_classes([IsAuthenticated])
+def user_verification(request):
+	data = {}
+	if request.method == 'POST':
+
+		verifycode = request.data.get('verification_code')
+
+		codes = AccountCode.objects.filter(user=account.pk)
+		if codes.count() == 0:
+			return Response({'response':'error'})
+
+		if verifycode == codes[0].verification_code:
+			data['token'] = token
+			data['email'] = account.email
+			return Response(data)
+
+		data['response'] = 'error'
+		data['error_msg'] = 'invalid code'
+		return Response(data)
+
+
+
 
 
 

@@ -29,7 +29,7 @@ class RegistirationTestCase(APITestCase):
         data={"email":"test@localhosst.app","firstname":"test",
           "lastname":"case","company_name":"testC","job_title":"TR",
         "mobile_number":"012","company_industries":"TR","size_of_company":"SB",
-          "password":"some_strng_pass","is_staff":"false"
+          "is_staff":"false"
             ,"verified":"false","is_company":"true"}
 
 

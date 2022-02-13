@@ -69,16 +69,15 @@ class Account(AbstractBaseUser):
 		for i in range(4):
 			OTP += digits[math.floor(random.random() * 10)]
 			codes = AccountCode.objects.filter(user=self.pk)
-			if codes.count() == 0:
-				codes = AccountCode.objects.create(user=self, verification_code = OTP)
-			else:
-				codes = codes[0]
-				codes.verification_code = OTP
-			codes.save()
-			subject = f'hi {self.firstname}, this mail is for your verification code:'
-			body = f'your verification code is: {codes.verification_code}'
-			SendMail(subject, body, email).start()
-
+		if codes.count() == 0:
+			codes = AccountCode.objects.create(user=self, verification_code = OTP)
+		else:
+			codes = codes[0]
+		codes.verification_code = OTP
+		codes.save()
+		subject = f'hi {self.firstname}, this mail is for your verification code:'
+		body = f'your verification code is: {codes.verification_code}'
+		SendMail(subject, body, email).start()
 
 
 
@@ -101,6 +100,7 @@ class Account(AbstractBaseUser):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
 	if created:
 		Token.objects.create(user=instance)
+		instance.verify()
 
 
 

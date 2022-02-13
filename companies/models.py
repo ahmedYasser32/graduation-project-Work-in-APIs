@@ -45,6 +45,8 @@ class CompanyProfile(models.Model):
     isInternational    = models.BooleanField(null=True)
     headquarters       = models.CharField(max_length=30,null=True)
     founded_at         = models.DateTimeField(null=True)
+    website            = models.CharField(max_length=100,null=True)
+    Location           = models.CharField(max_length=50,null=True)
 
     """ #Multiple locations??
     locations = ListCharField(
