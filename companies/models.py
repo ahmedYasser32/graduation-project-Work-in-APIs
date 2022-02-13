@@ -7,6 +7,9 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+import re
+from django.core.exceptions import ValidationError
+
 
 
 
@@ -36,7 +39,6 @@ class CompanyProfile(models.Model):
     company_name       = models.CharField(max_length=25,null = True)
 
 
-    size_of_company    = models.CharField(max_length=25,choices=company_sizes,default='SB')
     company_industries = models.CharField(max_length=25,choices=industries,default='T')
     company_type       = models.CharField(max_length=25,choices=company_types,default='PRV')
     mobile_number      = models.CharField(max_length=13,null=True)
@@ -48,6 +50,9 @@ class CompanyProfile(models.Model):
     website            = models.CharField(max_length=100,null=True)
     Location           = models.CharField(max_length=50,null=True)
 
+
+
+
     """ #Multiple locations??
     locations = ListCharField(
         base_field=CharField(max_length=10),
@@ -55,5 +60,18 @@ class CompanyProfile(models.Model):
         max_length=(6 * 11)  # 6 * 10 character nominals, plus commas
     )
 """
+
+    def clean(self):
+        if not bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?',self.job_title)):
+             raise ValidationError({'job_title': "names must not contain digits!"})
+
+        if not bool(re.fullmatch('/^\d[\d+]*$',self.no_of_employees)):
+             raise ValidationError({'no_of_employees': "only numbers are allowed!"})
+
+        if not bool(re.fullmatch('/^\d[\d+]*$',self.mobile_number)):
+             raise ValidationError({'mobile_number': "only numbers are allowed!"})
+
+
+
 
 

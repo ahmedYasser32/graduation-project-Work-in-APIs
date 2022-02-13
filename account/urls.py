@@ -4,7 +4,6 @@ from account.views import *
 
 
 urlpatterns = [
-
  path('register/',RegisterAPI.as_view()),
  path('login/',LoginAPI.as_view()),
  path('reset_password_mail/', check_reset_password_mail, name="check_if_account_exists"),

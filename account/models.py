@@ -6,7 +6,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from datetime import datetime
+from django.core.exceptions import ValidationError
 import math,random
+import re
+
+
 
 
 
@@ -40,8 +44,8 @@ class MyAccountManager(BaseUserManager):
 class Account(AbstractBaseUser):
 	email                   = models.EmailField(verbose_name="email", max_length=60, unique=True)
 	username 				= None
-	firstname               = models.CharField(max_length=25,null = True)
-	lastname                = models.CharField(max_length=25,null = True)
+	firstname               = models.CharField(max_length=25,null = False,default="firstname")
+	lastname                = models.CharField(max_length=25,null = False,default="lastname")
 	date_joined				= models.DateTimeField(verbose_name='date joined', auto_now_add=True)
 	last_login				= models.DateTimeField(verbose_name='last login', auto_now=True)
 	#add boolean field to differentiate between users and companies
@@ -60,6 +64,23 @@ class Account(AbstractBaseUser):
 	objects = MyAccountManager()
 	def __str__(self):
 		return self.email
+
+	def clean(self):
+		if not bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?',self.firstname)):
+			raise ValidationError(
+			{'firstname': "names must not contain digits!"})
+
+		if not bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?',self.lastname)) :
+			raise ValidationError(
+                {'lastname': "names must not contain digits!"})
+
+
+
+
+
+
+
+
 
 	def verify(self):
 		email =self.email
