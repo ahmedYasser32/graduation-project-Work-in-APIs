@@ -37,6 +37,7 @@ class CompanyProfile(models.Model):
     content_type       = models.CharField(max_length=256, null=True, help_text='The MIMEType of the file')
     size_of_company    = models.CharField(max_length=25,choices=company_sizes,default='SB')
     company_name       = models.CharField(max_length=25,null = True)
+    company_info       = models.CharField(max_length=1500,null = True)
 
 
     company_industries = models.CharField(max_length=25,choices=industries,default='T')
@@ -48,7 +49,7 @@ class CompanyProfile(models.Model):
     headquarters       = models.CharField(max_length=30,null=True)
     founded_at         = models.DateTimeField(null=True)
     website            = models.CharField(max_length=100,null=True)
-    Location           = models.CharField(max_length=50,null=True)
+    location           = models.CharField(max_length=50,null=True)
 
 
 
@@ -64,12 +65,21 @@ class CompanyProfile(models.Model):
     def clean(self):
         if not bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?',self.job_title)):
              raise ValidationError({'job_title': "names must not contain digits!"})
+        else:
+             return self.job_title
 
         if not bool(re.fullmatch('/^\d[\d+]*$',self.no_of_employees)):
              raise ValidationError({'no_of_employees': "only numbers are allowed!"})
+        else:
+            return self.no_of_employees
 
         if not bool(re.fullmatch('/^\d[\d+]*$',self.mobile_number)):
              raise ValidationError({'mobile_number': "only numbers are allowed!"})
+
+        else:
+            return self.mobile_number
+
+
 
 
 

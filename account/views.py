@@ -96,6 +96,7 @@ class LoginAPI(APIView):
 @permission_classes([])
 @authentication_classes([])
 @permission_classes([IsAuthenticated])
+
 def check_verification_mail(request):
 	if request.method == 'POST':
 		data = {}
@@ -275,7 +276,7 @@ def check_reset_password_code(request, token):
 
 	if request.method == 'POST':
 
-		reset_password_code = request.data.get('code')
+		reset_password_code = request.data.get('reset_password_code')
 
 		codes = AccountCode.objects.filter(user=account.pk)
 		if codes.count() == 0:

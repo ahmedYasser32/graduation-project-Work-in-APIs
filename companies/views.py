@@ -17,7 +17,7 @@ class Company_RegisterAPI(APIView):
 
     def post(self, request, *args, **kwargs):
         context = {}
-        email                 = request.data.get('email').lower()
+        email                 = request.data.get('email')
 
 
 
@@ -140,4 +140,54 @@ class Company_LoginAPI(APIView):
         context['response'] = 'Error'
         context['error_message'] = 'Invalid credentials'
         return Response(data=context)
+
+#Company profile setup
+class CompanyProfileSetup(APIView):
+    authentication_classes     = []
+    permission_classes         = []
+    serializer_class           = CompanyProfileSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        context = {}
+        email     = request.data.get('email').lower()
+        email     = Account.objects.filter(email=email)
+
+
+
+
+        if email.count() == 0:
+            print("inside if")
+            context['response'] = 'Error'
+            context['error_message'] = 'email not registered'
+            return Response(data=context)
+
+        account = email[0]
+
+        data = request.data.copy()
+        serializer=self.serializer_class(data=data)
+
+
+        if serializer.is_valid():
+            #if valid save object and send response
+            serializer.save()
+
+            context['email']       = account.email
+            context['is_company']  = account.is_company
+            context['firstname']   = account.firstname
+            context['lastname']    = account.lastname
+            #** turn dictioanries into vars and copy values from serailizer
+            context= {**context,**serializer.data.copy()}
+
+            context['response']    = "Success"
+
+            return Response(data=context)
+
+
+
+        else:
+
+            context = serializer.errors.copy()
+            context['response'] = 'error'
+            return Response(data=context)
 

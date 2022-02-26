@@ -49,3 +49,16 @@ class RegistirationTestCase(APITestCase):
         print("Login response :",response.data)
 
 
+    def test_companyprofile_setup(self):
+
+        data={"user":"1","email":"test@localhosst.app","website":"www.company.com","founded_at":"",
+              "Location":"23 st ahmad","headquarters":"place","company_type":"PRV",
+              "company_info":"wqerwffijdnfijdsfoudhfoudbsofubsdofbsdofb"
+}
+
+
+        response = self.client.post("/api/company/Profile_setup/", data)
+        print("profile setup response:",response.data)
+
+
+        self.assertEqual(response.status_code, 200)
