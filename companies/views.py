@@ -18,10 +18,12 @@ class Company_RegisterAPI(APIView):
     def post(self, request, *args, **kwargs):
         context = {}
         email                 = request.data.get('email')
+        email = email.lower() if email else None
 
 
 
        #check email if already exist send error
+
 
         if Account.objects.filter(email=email).count()>0:
             context['error_message'] = 'That email is already in use.'
@@ -41,8 +43,8 @@ class Company_RegisterAPI(APIView):
             account = serializer.save()
             context['email'] = account.email
             context['pk'] = account.pk
-            token = Token.objects.get(user=account).key
-            context['token'] = token
+            #token = Token.objects.get(user=account).key
+            #context['token'] = token
             context['is_verified'] = account.verified
             context['is_company']  = account.is_company
             context['response']    = "Success"
@@ -65,14 +67,15 @@ class CompanyProfileAPI(APIView):
 
     def post(self, request, *args, **kwargs):
         context = {}
-        email        = request.data.get('email').lower()
-        email        =Account.objects.filter(email=email)
+        email = request.data.get('email')
+        email = email.lower() if email else None
+        account        =Account.objects.filter(email=email)
         company_name = request.data.get('company_name')
 
 
        #check email if already exist send error
 
-        if email.count() == 0:
+        if account.count() == 0:
             context['error_message'] = 'Account not found.'
             context['response'] = 'error'
             return Response(data=context)
@@ -84,9 +87,9 @@ class CompanyProfileAPI(APIView):
 
 
        # Assign serializer
-        account = email[0]
-        account.firstname = request.data.get('firstname')
-        account.lastname = request.data.get('lastname')
+        account = account[0]
+        account.firstname = request.data.get('firstname', '')
+        account.lastname = request.data.get('lastname', '')
         account.save()
         data = request.data.copy()
         #set relation
@@ -150,22 +153,23 @@ class CompanyProfileSetup(APIView):
     def post(self, request, *args, **kwargs):
 
         context = {}
-        email     = request.data.get('email').lower()
-        email     = Account.objects.filter(email=email)
+        email = request.data.get('email')
+        email = email.lower() if email else None
+        account     = Account.objects.select_related('companyprofile').filter(email=email)
 
 
 
 
-        if email.count() == 0:
-            print("inside if")
+        if account.count() == 0:
+            #print("inside if")
             context['response'] = 'Error'
             context['error_message'] = 'email not registered'
             return Response(data=context)
 
-        account = email[0]
+        account = account[0]
 
         data = request.data.copy()
-        serializer=self.serializer_class(data=data)
+        serializer=self.serializer_class(account.companyprofile, data=data, partial=True)
 
 
         if serializer.is_valid():
