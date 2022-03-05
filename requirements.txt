@@ -71,8 +71,8 @@ coreapi
 coreschema
 drf-yasg
 inflection
-itypes-1.2.0 jin
-ja2
+itypes
+jinja2
 packaging
 pyparsing
 ruamel.yaml
