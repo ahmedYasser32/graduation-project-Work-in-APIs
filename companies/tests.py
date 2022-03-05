@@ -10,13 +10,14 @@ from account.models import Account
 
 class RegistirationTestCase(APITestCase):
     def setUp(self):
-        self.email=Account.objects.create(email='test@localhosst.app')
+
+        self.email=Account.objects.create(email='test@localhost.app')
         self.email.set_password('some_strng_pass')
         self.email.save()
 
     def test_company_registiration(self):
-        data={"email":"tesst@localhosst.app",
-          "password":"some_strng_pass"}
+        data={"email":"tesst@localhost.app",
+          "password":"some_strnng_pass"}
 
         response = self.client.post("/api/company/register/",data)
         print("registiration one response",response.data)
@@ -26,7 +27,7 @@ class RegistirationTestCase(APITestCase):
 
     def test_company_registiration_two(self):
 
-        data={"email":"test@localhosst.app","firstname":"test",
+        data={"email":"test@localhost.app","firstname":"test",
           "lastname":"case","company_name":"testC","job_title":"TR",
         "mobile_number":"012","company_industries":"TR","size_of_company":"SB",
           "is_staff":"false"
@@ -40,18 +41,20 @@ class RegistirationTestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_company_login(self):
-        data={"email":"test@localhosst.app",
+
+        data={"email":"test@localhost.app",
           "password":"some_strng_pass"}
 
         response = self.client.post("/api/company/login/",data)
 
         self.assertEqual(response.status_code, 200)
+        print("logged in********************************")
         print("Login response :",response.data)
 
 
     def test_companyprofile_setup(self):
 
-        data={"user":"1","email":"test@localhosst.app","website":"www.company.com","founded_at":"",
+        data={"email":"test@localhost.app","website":"www.company.com","founded_at":"",
               "Location":"23 st ahmad","headquarters":"place","company_type":"PRV",
               "company_info":"wqerwffijdnfijdsfoudhfoudbsofubsdofbsdofb"
 }

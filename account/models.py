@@ -62,6 +62,7 @@ class Account(AbstractBaseUser):
 	REQUIRED_FIELDS = []
 
 	objects = MyAccountManager()
+
 	def __str__(self):
 		return self.email
 
@@ -176,7 +177,7 @@ Data
 
 class Profile(models.Model):
 
-	User = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
+	user = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
 
 
 	career_level_choices = [("ST","Student"),("EL","Entrylevel"),("JR","Junior")
@@ -194,32 +195,32 @@ class Profile(models.Model):
 
 	langs =[("DU","Deutsch"),("FR","French"),("En","English"),("AR","Arabic")]
 
-	phone_number = models.CharField(max_length=13)
+	phone_number = models.CharField(max_length=13,null=True)
 
-	career_level = models.CharField(max_length=11,choices=career_level_choices,)
+	career_level = models.CharField(max_length=11,choices=career_level_choices,default="JR")
 
 	job_types = models.CharField(max_length=20,choices=job_types_choices,)
 
-	careers_intrests = models.CharField(max_length=25,choices=intrested_careers_choices,)
+	careers_intrests = models.CharField(max_length=25,choices=intrested_careers_choices,default='SE')
 
-	min_salary =models.PositiveIntegerField()
+	min_salary =models.PositiveIntegerField(null=True)
 
-	skills=models.CharField(max_length=200)
+	skills=models.CharField(max_length=200,null=True)
 
-	birthdate = models.DateTimeField()
+	birthdate = models.DateTimeField(null=True)
 
-	gender = models.CharField(max_length=15,choices=genders_choices,default="")
+	gender = models.CharField(max_length=15,choices=genders_choices,default="M")
 
-	location=models.CharField(max_length=50)
+	location=models.CharField(max_length=50,null=True)
 
-	years_of_experience=models.PositiveIntegerField()
+	years_of_experience=models.PositiveIntegerField(null=True)
 
-	education_level = models.CharField(max_length=15,choices=education_level_choices)
+	education_level = models.CharField(max_length=15,choices=education_level_choices,default="BCH")
 
-	study_fields     = models.CharField(max_length=15,choices=study_Field_choices)
+	study_fields     = models.CharField(max_length=15,choices=study_Field_choices,default="ENG")
 
-	uni = models.CharField(max_length=200)
+	uni = models.CharField(max_length=200,null=True)
 
-	gpa = models.CharField(max_length=2)
+	gpa = models.CharField(max_length=3,null=True)
 
-	languages= models.CharField(max_length=20,choices=langs)
+	languages= models.CharField(max_length=20,choices=langs,default="En")

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from account.models import Account
+from account.models import Account,Profile
 from companies.models import CompanyProfile
 
 
@@ -26,6 +26,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
 		account.save()
 		return account
 
+class UserProfileSerializer(serializers.ModelSerializer):
 
+	class Meta:
+		model =	 Profile
+		fields = '__all__'
 
 

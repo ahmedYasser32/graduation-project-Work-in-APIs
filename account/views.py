@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from rest_framework.decorators import *
-from account.serializers import RegistrationSerializer
+from account.serializers import *
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 import pytz
@@ -15,6 +15,7 @@ from django.contrib.auth.password_validation import validate_password
 from cryptography.fernet import Fernet
 from mysite.tasks import SendMail
 from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
 
 
 # Register API
@@ -345,3 +346,102 @@ def reset_password(request, token):
 		return Response(data)
 
 
+class UserProfileAPI(APIView):
+    authentication_classes     = []
+    permission_classes         = []
+    serializer_class           = UserProfileSerializer
+
+
+
+    def post(self, request, *args, **kwargs):
+        context  = {}
+        email    = request.data.get('email')
+        email    = email.lower() if email else None
+        account  = Account.objects.filter(email=email)
+
+
+
+       # if account exists
+
+        if account.count() == 0 :
+            context['error_message'] = 'Account not found.'
+            context['response'] = 'error'
+            return Response(data=context)
+
+
+       # Assign serializer
+        data = request.data.copy()
+        #set relation
+        data['user'] = account.pk
+        serializer = self.serializer_class(data=data)
+
+        if serializer.is_valid():
+            #if valid save object and send response
+            serializer.save()
+            context['email']       = account.email
+            context['is_verified'] = account.verified
+            context['is_company']  = account.is_company
+            context['firstname']   = account.firstname
+            context['lastname']    = account.lastname
+            #** turn dictioanries into vars and copy values from serailizer
+            context= {**context,**serializer.data.copy()}
+            context['response']    = "Success"
+
+            return Response(data=context)
+
+
+
+        else:
+            context = serializer.errors.copy()
+            context['response'] = 'error'
+            return Response(data=context)
+
+class UserProfileSetup(APIView):
+    authentication_classes     = []
+    permission_classes         = []
+    serializer_class           = UserProfileSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        context = {}
+        email = request.data.get('email')
+        email = email.lower() if email else None
+        #profile class in database #select related = join in sql
+        account     = Account.objects.select_related('profile').filter(email=email)
+
+
+
+
+        if account.count() == 0:
+            context['response'] = 'Error'
+            context['error_message'] = 'email not registered'
+            return Response(data=context)
+
+        account = account[0]
+
+        data = request.data.copy()
+        serializer=self.serializer_class(account.profile, data=data, partial=True)
+
+
+        if serializer.is_valid():
+            #if valid save object and send response
+            serializer.save()
+
+            context['email']       = account.email
+            context['is_company']  = account.is_company
+            context['firstname']   = account.firstname
+            context['lastname']    = account.lastname
+            #** turn dictioanries into vars and copy values from serailizer
+            context= {**context,**serializer.data.copy()}
+
+            context['response']    = "Success"
+
+            return Response(data=context)
+
+
+
+        else:
+
+            context = serializer.errors.copy()
+            context['response'] = 'error'
+            return Response(data=context)

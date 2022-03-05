@@ -7,13 +7,16 @@ from rest_framework.response import Response
 from companies.serializers import RegistrationSerializer,CompanyProfileSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+from drf_yasg.utils import swagger_auto_schema
 
 # Register API
 class Company_RegisterAPI(APIView):
+
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = RegistrationSerializer
 
+    @swagger_auto_schema(responses={200: RegistrationSerializer(many=True)})
 
     def post(self, request, *args, **kwargs):
         context = {}
@@ -43,8 +46,8 @@ class Company_RegisterAPI(APIView):
             account = serializer.save()
             context['email'] = account.email
             context['pk'] = account.pk
-            #token = Token.objects.get(user=account).key
-            #context['token'] = token
+            token = Token.objects.get(user=account).key
+            context['token'] = token
             context['is_verified'] = account.verified
             context['is_company']  = account.is_company
             context['response']    = "Success"
@@ -54,17 +57,19 @@ class Company_RegisterAPI(APIView):
 
 
         else:
+
             context = serializer.errors.copy()
             context['response'] = 'error'
             return Response(data=context)
 
 
 # Register API 2
+
 class CompanyProfileAPI(APIView):
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = CompanyProfileSerializer
-
+    @swagger_auto_schema(responses={200: CompanyProfileSerializer(many=True)})
     def post(self, request, *args, **kwargs):
         context = {}
         email = request.data.get('email')
@@ -155,6 +160,7 @@ class CompanyProfileSetup(APIView):
         context = {}
         email = request.data.get('email')
         email = email.lower() if email else None
+        #companyprofile = CompanyProfile class in database #select related = join in sql
         account     = Account.objects.select_related('companyprofile').filter(email=email)
 
 
