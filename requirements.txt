@@ -65,3 +65,16 @@ hyper==0.7.0
 hyperframe==3.2.0
 py-vapid==1.8.2
 pywebpush==1.14.0
+
+MarkupSafe
+coreapi
+coreschema
+drf-yasg
+inflection
+itypes-1.2.0 jin
+ja2
+packaging
+pyparsing
+ruamel.yaml
+ruamel.yaml.clib
+uritemplate
