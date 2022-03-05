@@ -370,6 +370,7 @@ class UserProfileAPI(APIView):
 
 
        # Assign serializer
+        account= account[0]
         data = request.data.copy()
         #set relation
         data['user'] = account.pk

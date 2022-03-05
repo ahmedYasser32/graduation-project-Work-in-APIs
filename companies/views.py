@@ -64,18 +64,22 @@ class Company_RegisterAPI(APIView):
 
 
 # Register API 2
-
 class CompanyProfileAPI(APIView):
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = CompanyProfileSerializer
-    @swagger_auto_schema(responses={200: CompanyProfileSerializer(many=True)})
+    #@swagger_auto_schema(responses={200: CompanyProfileSerializer(many=True)})
     def post(self, request, *args, **kwargs):
         context = {}
+        print(request.data)
         email = request.data.get('email')
+        print(email)
         email = email.lower() if email else None
+        print(email)
         account        =Account.objects.filter(email=email)
+        print(account)
         company_name = request.data.get('company_name')
+        print(company_name)
 
 
        #check email if already exist send error
@@ -85,9 +89,11 @@ class CompanyProfileAPI(APIView):
             context['response'] = 'error'
             return Response(data=context)
 
+        print(CompanyProfile.objects.filter(company_name=company_name))
         if CompanyProfile.objects.filter(company_name=company_name).count()>0:
             context['error_message'] = 'That company name is already in use.'
             context['response'] = 'error'
+            print('zzz')
             return Response(data=context)
 
 
