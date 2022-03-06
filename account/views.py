@@ -16,25 +16,17 @@ from cryptography.fernet import Fernet
 from mysite.tasks import SendMail
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
+
 
 # Register API
 class RegisterAPI(APIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = RegistrationSerializer
-    @swagger_auto_schema(request_body=openapi.Schema(
-     type=openapi.TYPE_OBJECT,
-     properties={
-        'email': openapi.Schema(type=openapi.TYPE_STRING , description='email'),
-		'firstname': openapi.Schema(type=openapi.TYPE_STRING , description='firstname'),
-		'lastname': openapi.Schema(type=openapi.TYPE_STRING , description='lastname'),
-        'password': openapi.Schema(type=openapi.TYPE_STRING  , description='password')
-     }),
-     responses={200: RegistrationSerializer, 400 : 'Bad Request'})
+
     def post(self, request, *args, **kwargs):
         print(request.data)
-        print(request.data.get('email'))
+        print(request.data.get('email````'))
         context = {}
         email = request.data.get('email').lower()
 
@@ -75,17 +67,7 @@ class RegisterAPI(APIView):
 class LoginAPI(APIView):
     authentication_classes = []
     permission_classes = []
-<<<<<<< HEAD
     serializer_class = UserProfileSerializer
-=======
-    @swagger_auto_schema(request_body=openapi.Schema(
-      type=openapi.TYPE_OBJECT,
-      properties={
-        'email': openapi.Schema(type=openapi.TYPE_STRING , description='email'),
-        'password': openapi.Schema(type=openapi.TYPE_STRING  , description='password')
-      }),
-	 responses={200: RegistrationSerializer,400: 'Bad Request'})
->>>>>>> 78aba49a38b0d3616efd57a87f309a634ada3e8b
     def post(self, request, *args, **kwargs):
         context = {}
         email = request.data.get('email')
@@ -379,12 +361,7 @@ class UserProfileAPI(APIView):
     serializer_class           = UserProfileSerializer
 
 
-    @swagger_auto_schema(request_body=openapi.Schema(
-     type=openapi.TYPE_OBJECT,
-     properties={
-        'email': openapi.Schema(type=openapi.TYPE_STRING , description='email  + the data from the response without the user field'),
-     }),
-     responses={200: UserProfileSerializer, 400 : 'Bad Request'})
+
     def post(self, request, *args, **kwargs):
         context  = {}
         email    = request.data.get('email')
@@ -402,7 +379,6 @@ class UserProfileAPI(APIView):
 
 
        # Assign serializer
-		#choose object
         account= account[0]
         data = request.data.copy()
         #set relation
@@ -434,12 +410,7 @@ class UserProfileSetup(APIView):
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = UserProfileSerializer
-    @swagger_auto_schema(request_body=openapi.Schema(
-     type=openapi.TYPE_OBJECT,
-     properties={
-        'email': openapi.Schema(type=openapi.TYPE_STRING , description='email  + the data from the response without the user field'),
-     }),
-     responses={200: UserProfileSerializer, 400 : 'Bad Request'})
+
     def post(self, request, *args, **kwargs):
 
         context = {}
