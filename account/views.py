@@ -31,10 +31,10 @@ class RegisterAPI(APIView):
 		'lastname': openapi.Schema(type=openapi.TYPE_STRING , description='lastname'),
         'password': openapi.Schema(type=openapi.TYPE_STRING  , description='password')
      }),
-     responses={200: RegistrationSerializer,400: 'Bad Request'})
+     responses={200: RegistrationSerializer, 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
         print(request.data)
-        print(request.data.get('email````'))
+        print(request.data.get('email'))
         context = {}
         email = request.data.get('email').lower()
 
@@ -366,7 +366,12 @@ class UserProfileAPI(APIView):
     serializer_class           = UserProfileSerializer
 
 
-
+    @swagger_auto_schema(request_body=openapi.Schema(
+     type=openapi.TYPE_OBJECT,
+     properties={
+        'email': openapi.Schema(type=openapi.TYPE_STRING , description='email  + the data from the response without the user field'),
+     }),
+     responses={200: UserProfileSerializer, 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
         context  = {}
         email    = request.data.get('email')
@@ -416,7 +421,12 @@ class UserProfileSetup(APIView):
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = UserProfileSerializer
-
+    @swagger_auto_schema(request_body=openapi.Schema(
+     type=openapi.TYPE_OBJECT,
+     properties={
+        'email': openapi.Schema(type=openapi.TYPE_STRING , description='email  + the data from the response without the user field'),
+     }),
+     responses={200: UserProfileSerializer, 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
 
         context = {}
