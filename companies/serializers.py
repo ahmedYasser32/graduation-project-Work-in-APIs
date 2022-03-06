@@ -4,7 +4,7 @@ from account.models import Account
 from companies.models import CompanyProfile
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
+class CompanyRegistrationSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Account
@@ -29,4 +29,6 @@ class CompanyProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = CompanyProfile
 		fields = '__all__'
+
+
 
