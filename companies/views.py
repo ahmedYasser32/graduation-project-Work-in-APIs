@@ -132,6 +132,7 @@ class CompanyProfileAPI(APIView):
 class Company_LoginAPI(APIView):
     authentication_classes = []
     permission_classes = []
+    serializer_class = CompanyProfileSerializer
 
     def post(self, request, *args, **kwargs):
         context = {}
@@ -148,8 +149,17 @@ class Company_LoginAPI(APIView):
             context['email'] = email.lower()
             context['token'] = token.key
             context['is_verified'] = account.verified
-            print(account)
-            print(context)
+            #print(account)
+            #print(context)
+            profile_created = False
+            try:
+                company_profile = account.companyprofile
+                serializer = self.serializer_class(company_profile)
+                context.update(serializer.data)
+                profile_created = True
+            except Account.companyprofile.RelatedObjectDoesNotExist:
+                pass
+            context['profile_created'] = profile_created
             return Response(data=context)
         context['response'] = 'Error'
         context['error_message'] = 'Invalid credentials'
@@ -181,7 +191,12 @@ class CompanyProfileSetup(APIView):
         account = account[0]
 
         data = request.data.copy()
-        serializer=self.serializer_class(account.companyprofile, data=data, partial=True)
+        try:
+            company_profile = account.companyprofile
+        except Account.companyprofile.RelatedObjectDoesNotExist:
+            context = {"response":"error", "error_msg":"company profile not exist"}
+            return Response(data=context)
+        serializer=self.serializer_class(company_profile, data=data, partial=True)
 
 
         if serializer.is_valid():
