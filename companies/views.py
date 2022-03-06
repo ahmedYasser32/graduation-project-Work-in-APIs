@@ -4,20 +4,26 @@ from companies.models import CompanyProfile
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from companies.serializers import RegistrationSerializer,CompanyProfileSerializer
+from companies.serializers import CompanyRegistrationSerializer,CompanyProfileSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 # Register API
 class Company_RegisterAPI(APIView):
 
     authentication_classes     = []
     permission_classes         = []
-    serializer_class           = RegistrationSerializer
+    serializer_class           = CompanyRegistrationSerializer
 
-    @swagger_auto_schema(responses={200: RegistrationSerializer(many=True)})
-
+    @swagger_auto_schema(request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'email': openapi.Schema(type=openapi.TYPE_STRING , description='email'),
+        'password': openapi.Schema(type=openapi.TYPE_STRING  , description='password')
+    }),
+    responses={200: CompanyRegistrationSerializer,400: 'Bad Request'})
     def post(self, request, *args, **kwargs):
         context = {}
         email                 = request.data.get('email')
@@ -68,7 +74,13 @@ class CompanyProfileAPI(APIView):
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = CompanyProfileSerializer
-    #@swagger_auto_schema(responses={200: CompanyProfileSerializer(many=True)})
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+     type=openapi.TYPE_OBJECT,
+     properties={
+         'email': openapi.Schema(type=openapi.TYPE_STRING , description='email and the rest of the data from response'),
+       }),
+     responses={200: CompanyProfileSerializer,400: 'Error'})
     def post(self, request, *args, **kwargs):
         context = {}
         print(request.data)
@@ -119,8 +131,18 @@ class CompanyProfileAPI(APIView):
             context= {**context,**serializer.data.copy()}
             context['response']    = "Success"
 
-            return Response(data=context)
-
+ #       ??     return Response(data=context)
+ # profile_created = False
+ #            try:
+ #                profile = account.profile
+ #                serializer = self.serializer_class(profile)
+ #                context.update(serializer.data)
+ #                profile_created = True
+ #            except Account.profile.RelatedObjectDoesNotExist:
+ #                pass
+	# 		#context= {**context,**serializer.data.copy()}??
+ #            context['profile_created'] = profile_created
+ #            return Response(data=context)
 
 
         else:
@@ -132,8 +154,14 @@ class CompanyProfileAPI(APIView):
 class Company_LoginAPI(APIView):
     authentication_classes = []
     permission_classes = []
-    serializer_class = CompanyProfileSerializer
 
+    @swagger_auto_schema(request_body=openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        'email': openapi.Schema(type=openapi.TYPE_STRING , description='email'),
+        'password': openapi.Schema(type=openapi.TYPE_STRING  , description='password')
+    }),
+    responses={200: CompanyRegistrationSerializer,400: 'Bad Request'})
     def post(self, request, *args, **kwargs):
         context = {}
         email = request.data.get('email')
@@ -149,17 +177,6 @@ class Company_LoginAPI(APIView):
             context['email'] = email.lower()
             context['token'] = token.key
             context['is_verified'] = account.verified
-            #print(account)
-            #print(context)
-            profile_created = False
-            try:
-                company_profile = account.companyprofile
-                serializer = self.serializer_class(company_profile)
-                context.update(serializer.data)
-                profile_created = True
-            except Account.companyprofile.RelatedObjectDoesNotExist:
-                pass
-            context['profile_created'] = profile_created
             return Response(data=context)
         context['response'] = 'Error'
         context['error_message'] = 'Invalid credentials'
@@ -171,6 +188,13 @@ class CompanyProfileSetup(APIView):
     permission_classes         = []
     serializer_class           = CompanyProfileSerializer
 
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+     type=openapi.TYPE_OBJECT,
+     properties={
+         'email': openapi.Schema(type=openapi.TYPE_STRING , description='email + the rest of the data from response'),
+     }),
+    responses={200: CompanyProfileSerializer,400: 'Error'})
     def post(self, request, *args, **kwargs):
 
         context = {}
@@ -191,12 +215,7 @@ class CompanyProfileSetup(APIView):
         account = account[0]
 
         data = request.data.copy()
-        try:
-            company_profile = account.companyprofile
-        except Account.companyprofile.RelatedObjectDoesNotExist:
-            context = {"response":"error", "error_msg":"company profile not exist"}
-            return Response(data=context)
-        serializer=self.serializer_class(company_profile, data=data, partial=True)
+        serializer=self.serializer_class(account.companyprofile, data=data, partial=True)
 
 
         if serializer.is_valid():
@@ -221,4 +240,3 @@ class CompanyProfileSetup(APIView):
             context = serializer.errors.copy()
             context['response'] = 'error'
             return Response(data=context)
-
