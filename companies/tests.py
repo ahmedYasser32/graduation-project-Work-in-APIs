@@ -15,6 +15,7 @@ class RegistirationTestCase(APITestCase):
         self.email.set_password('some_strng_pass')
         self.email.save()
 
+
     def test_company_registiration(self):
         data={"email":"tesst@localhost.app",
           "password":"some_strnng_pass"}

@@ -62,6 +62,8 @@ class Company_RegisterAPI(APIView):
 
 
 
+
+
         else:
 
             context = serializer.errors.copy()
@@ -105,7 +107,6 @@ class CompanyProfileAPI(APIView):
         if CompanyProfile.objects.filter(company_name=company_name).count()>0:
             context['error_message'] = 'That company name is already in use.'
             context['response'] = 'error'
-            print('zzz')
             return Response(data=context)
 
 
@@ -119,6 +120,7 @@ class CompanyProfileAPI(APIView):
         data['user'] = account.pk
         serializer = self.serializer_class(data=data)
 
+
         if serializer.is_valid():
             #if valid save object and send response
             serializer.save()
@@ -131,18 +133,7 @@ class CompanyProfileAPI(APIView):
             context= {**context,**serializer.data.copy()}
             context['response']    = "Success"
 
- #       ??     return Response(data=context)
- # profile_created = False
- #            try:
- #                profile = account.profile
- #                serializer = self.serializer_class(profile)
- #                context.update(serializer.data)
- #                profile_created = True
- #            except Account.profile.RelatedObjectDoesNotExist:
- #                pass
-	# 		#context= {**context,**serializer.data.copy()}??
- #            context['profile_created'] = profile_created
- #            return Response(data=context)
+            return Response(data=context)
 
 
         else:
@@ -177,7 +168,20 @@ class Company_LoginAPI(APIView):
             context['email'] = email.lower()
             context['token'] = token.key
             context['is_verified'] = account.verified
+            profile_created = False
+            try:
+                company_profile = account.companyprofile
+                serializer = self.serializer_class(company_profile)
+                context.update(serializer.data)
+                profile_created = True
+            except Account.companyprofile.RelatedObjectDoesNotExist:
+                pass
+
+            context['profile_created'] = profile_created
+
+
             return Response(data=context)
+
         context['response'] = 'Error'
         context['error_message'] = 'Invalid credentials'
         return Response(data=context)
@@ -215,6 +219,15 @@ class CompanyProfileSetup(APIView):
         account = account[0]
 
         data = request.data.copy()
+        try:
+            company_profile = account.companyprofile
+
+        except Account.companyprofile.RelatedObjectDoesNotExist:
+            context = {"response":"error", "error_msg":"company profile not exist"}
+            return Response(data=context)
+
+
+
         serializer=self.serializer_class(account.companyprofile, data=data, partial=True)
 
 
