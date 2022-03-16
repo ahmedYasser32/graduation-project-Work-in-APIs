@@ -464,6 +464,7 @@ class UserProfileSetup(APIView):
         except Account.profile.RelatedObjectDoesNotExist:
             context = {"response":"error", "error_msg":"company profile not exist"}
             return Response(data=context)
+
         serializer=self.serializer_class(profile, data=data, partial=True)
 
 
@@ -495,6 +496,9 @@ class FileUploadView(APIView):
     permission_classes = []
     parser_class = (FileUploadParser,)
 
+    Profile.objects.filter(user__email=email)
+
+
     @swagger_auto_schema(request_body=openapi.Schema(
      type=openapi.TYPE_OBJECT,
      properties={
@@ -503,15 +507,21 @@ class FileUploadView(APIView):
      }),
      responses={201: FileSerializer , 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
+		context={}
+		email = request.data.get('email')
+        email = email.lower() if email else None
+	    context = request.data.copy()
 
-        context = request.data.copy()
-        context['file'] = request.FILES.get('file')
+	    profile= Profile.objects.filter(user__email=email)
+	    context['file'] = request.FILES.get('file')
 
 
         file_serializer = FileSerializer(data=context)
 
         if file_serializer.is_valid():
             file_serializer.save()
+			context= {**context,**serializer.data.copy()}
+			context['response']    = "Success"
             return Response(file_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
