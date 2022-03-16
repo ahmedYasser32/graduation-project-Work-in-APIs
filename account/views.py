@@ -496,32 +496,36 @@ class FileUploadView(APIView):
     permission_classes = []
     parser_class = (FileUploadParser,)
 
-    Profile.objects.filter(user__email=email)
 
 
     @swagger_auto_schema(request_body=openapi.Schema(
      type=openapi.TYPE_OBJECT,
      properties={
      'email': openapi.Schema(type=openapi.TYPE_STRING , description='email '),
-	 'file' :  openapi.Schema(type=openapi.TYPE_STRING , description='.pdf or imgs '),
+     'file' :  openapi.Schema(type=openapi.TYPE_STRING , description='.pdf or imgs '),
      }),
      responses={201: FileSerializer , 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
-		context={}
-		email = request.data.get('email')
+        context={}
+        email = request.data.get('email')
         email = email.lower() if email else None
-	    context = request.data.copy()
+        account = Account.objects.filter(email=email)
 
-	    profile= Profile.objects.filter(user__email=email)
-	    context['file'] = request.FILES.get('file')
+        if account.count() == 0:
+            context['response'] = 'Error'
+            context['error_message'] = 'email not registered'
+            return Response(data=context)
 
+        account = account[0]
 
-        file_serializer = FileSerializer(data=context)
+        context['file'] = request.FILES.get('file')
+
+        file_serializer = FileSerializer(account ,data=context)
 
         if file_serializer.is_valid():
             file_serializer.save()
-			context= {**context,**serializer.data.copy()}
-			context['response']    = "Success"
+            context= {**context,**serializer.data.copy()}
+            context['response']    = "Success"
             return Response(file_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
