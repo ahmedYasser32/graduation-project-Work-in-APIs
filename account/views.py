@@ -499,10 +499,10 @@ class FileUploadView(APIView):
 
 
     @swagger_auto_schema(request_body=openapi.Schema(
-     type=openapi.TYPE_OBJECT,
-     properties={
-     'email': openapi.Schema(type=openapi.TYPE_STRING , description='email '),
-     'file' :  openapi.Schema(type=openapi.TYPE_STRING , description='.pdf or imgs '),
+      type=openapi.TYPE_OBJECT,
+       properties={
+      'email': openapi.Schema(type=openapi.TYPE_STRING , description='email '),
+      'file' :  openapi.Schema(type=openapi.TYPE_STRING , description='.pdf or imgs '),
      }),
      responses={201: FileSerializer , 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):

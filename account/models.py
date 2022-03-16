@@ -198,7 +198,9 @@ class Profile(models.Model):
 
 	langs =[("DU","Deutsch"),("FR","French"),("En","English"),("AR","Arabic")]
 
+	nationality  = models.CharField(max_length=20,null=True)
 	phone_number = models.CharField(max_length=13,null=True)
+	job_title_looking_for   = models.CharField(max_length=30,null= True)
 
 	career_level = models.CharField(max_length=11,choices=career_level_choices,default="JR")
 
@@ -216,6 +218,12 @@ class Profile(models.Model):
 
 	location=models.CharField(max_length=50,null=True)
 
+	country = models.CharField(max_length=50,null=True)
+
+	city    = models.CharField(max_length=50,null=True)
+
+	area    = models.CharField(max_length=50,null=True)
+
 	years_of_experience=models.PositiveIntegerField(null=True)
 
 	education_level = models.CharField(max_length=15,choices=education_level_choices,default="BCH")
@@ -224,8 +232,12 @@ class Profile(models.Model):
 
 	uni = models.CharField(max_length=200,null=True)
 
-	gpa = models.CharField(max_length=3,null=True)
+	yearofgrad= models.PositiveSmallIntegerField(null=True,blank=True)
+
+	gpa = models.CharField(max_length=4,null=True)
 
 	languages= models.CharField(max_length=20,choices=langs,default="En")
+	language_level= models.CharField(max_length=20,null=True,blank=True)
+
 
 
