@@ -15,6 +15,7 @@ from pathlib import Path
 import dj_database_url
 import django_heroku
 import os
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -177,3 +178,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
+cloudinary.config(
+  cloud_name = "djakrzmd0",
+  api_key = "684245232729576",
+  api_secret = "DmafbUERtAVk5q7hZNAO999DZwI"
+)

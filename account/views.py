@@ -1,4 +1,4 @@
-from account.models import Account,AccountCode
+from account.models import Account,AccountCode,Profile
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,6 +17,7 @@ from mysite.tasks import SendMail
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from rest_framework.parsers import FileUploadParser
 
 # Register API
 class RegisterAPI(APIView):
@@ -488,3 +489,29 @@ class UserProfileSetup(APIView):
             context = serializer.errors.copy()
             context['response'] = 'error'
             return Response(data=context)
+
+class FileUploadView(APIView):
+
+    permission_classes = []
+    parser_class = (FileUploadParser,)
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+     type=openapi.TYPE_OBJECT,
+     properties={
+     'email': openapi.Schema(type=openapi.TYPE_STRING , description='email '),
+	 'file' :  openapi.Schema(type=openapi.TYPE_STRING , description='.pdf or imgs '),
+     }),
+     responses={201: FileSerializer , 400 : 'Bad Request'})
+    def post(self, request, *args, **kwargs):
+
+        context = request.data.copy()
+        context['file'] = request.FILES.get('file')
+
+
+        file_serializer = FileSerializer(data=context)
+
+        if file_serializer.is_valid():
+            file_serializer.save()
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

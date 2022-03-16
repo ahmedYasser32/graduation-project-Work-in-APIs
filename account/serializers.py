@@ -33,3 +33,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 
+class FileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['file']
+
+

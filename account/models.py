@@ -9,6 +9,7 @@ from datetime import datetime
 from django.core.exceptions import ValidationError
 import math,random
 import re
+from cloudinary.models import CloudinaryField
 
 
 
@@ -177,6 +178,8 @@ Data
 
 class Profile(models.Model):
 
+	file = CloudinaryField(resource_type="auto", null=True, blank=True)
+
 	user = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
 
 
@@ -224,3 +227,5 @@ class Profile(models.Model):
 	gpa = models.CharField(max_length=3,null=True)
 
 	languages= models.CharField(max_length=20,choices=langs,default="En")
+
+

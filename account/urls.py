@@ -12,7 +12,7 @@ urlpatterns = [
  path('send_verification_mail/',check_verification_mail,),
  path('user_verification/',user_verification),
  path('user_profile/',UserProfileAPI.as_view()),
- path('user_profile_update/',UserProfileSetup.as_view())
-
+ path('user_profile_update/',UserProfileSetup.as_view()),
+ path('upload_file',FileUploadView.as_view()),
 ]
 
