@@ -35,7 +35,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
+        model = Account
         fields = ['file']
 
 

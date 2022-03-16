@@ -47,6 +47,7 @@ class Account(AbstractBaseUser):
 	username 				= None
 	firstname               = models.CharField(max_length=25,null = False,default="firstname")
 	lastname                = models.CharField(max_length=25,null = False,default="lastname")
+	file = CloudinaryField(resource_type="auto", null=True, blank=True)
 	date_joined				= models.DateTimeField(verbose_name='date joined', auto_now_add=True)
 	last_login				= models.DateTimeField(verbose_name='last login', auto_now=True)
 	#add boolean field to differentiate between users and companies
@@ -178,7 +179,6 @@ Data
 
 class Profile(models.Model):
 
-	file = CloudinaryField(resource_type="auto", null=True, blank=True)
 
 	user = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
 
