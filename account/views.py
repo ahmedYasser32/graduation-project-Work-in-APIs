@@ -1,3 +1,5 @@
+
+from rest_framework import status
 from account.models import Account,AccountCode,Profile
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
@@ -17,7 +19,7 @@ from mysite.tasks import SendMail
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser,DataAndFiles, BaseParser
 
 # Register API
 class RegisterAPI(APIView):
@@ -494,26 +496,30 @@ class UserProfileSetup(APIView):
 class FileUploadView(APIView):
 
     permission_classes = []
-    parser_class = (FileUploadParser,)
+    parser_class = (MultiPartParser, JSONParser)
 
 
 
     @swagger_auto_schema(request_body=openapi.Schema(
-      type=openapi.TYPE_OBJECT,
-       properties={
-      'email': openapi.Schema(type=openapi.TYPE_STRING , description='email '),
-      'file' :  openapi.Schema(type=openapi.TYPE_STRING , description='.pdf or imgs '),
+     type=openapi.TYPE_OBJECT,
+     properties={
+     'email': openapi.Schema(type=openapi.TYPE_STRING , description='email '),
+     'file' :  openapi.Schema(type=openapi.TYPE_STRING , description='.pdf or imgs '),
      }),
      responses={201: FileSerializer , 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
+        #print(dir(request.stream.body))
         context={}
-        email = request.data.get('email')
+        email = request.GET.get('email')
+        print(request.data)
+        #print(dir(request.stream))
+
         email = email.lower() if email else None
         account = Account.objects.filter(email=email)
 
         if account.count() == 0:
             context['response'] = 'Error'
-            context['error_message'] = 'email not registered'
+            context['error_message'] = 'email not found'
             return Response(data=context)
 
         account = account[0]
@@ -524,7 +530,7 @@ class FileUploadView(APIView):
 
         if file_serializer.is_valid():
             file_serializer.save()
-            context= {**context,**serializer.data.copy()}
+            context= {**context,**file_serializer.data.copy()}
             context['response']    = "Success"
             return Response(file_serializer.data, status=status.HTTP_201_CREATED)
         else:
