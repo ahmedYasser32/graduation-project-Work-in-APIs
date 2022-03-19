@@ -20,10 +20,10 @@ pprint(resume.as_dict())
 all_resumes = client.get_all_resumes()
 #pprint(all_resumes.as_dict())
 #mo7amed cv
-identifier = 'zuDqhDNZ'
+#dentifier = 'zuDqhDNZ'
 
 #sonni cv
-#identifier = 'neuGGjlM'
+identifier = 'neuGGjlM'
 
 resume = client.get_resume(identifier=identifier)
 
@@ -35,7 +35,7 @@ pprint(resume['data'].keys())
 pprint(resume['meta'])
 x=0
 
-print(f"{resume['data']['is_resume_probability']*100}%")
+print(f"{resume['data']['is_resume_probability']}%")
 
 if 'name' in resume['data']:
 
@@ -80,13 +80,33 @@ if 'education' in resume['data']:
         education_level    = resume['data']['education'][0]['accreditation']['education']
         print(f"education level:{education_level}")
         x+=1
+
     if 'dates' in resume['data']['education'][0]:
      year_of_graduation = resume['data']['education'][0]['dates']['completion_date'].split('-')[0]
      print(f"Year of graduation:{year_of_graduation}")
+     x+=1
 
-print(resume['data']['publications'])
-print(resume['data']['referees'])
+if 'location' in resume['data']:
+    if 'country' in resume['data']['location']:
+     country = resume['data']['location']['country']
+     print(f"Country is : {country}")
+     x+=1
+    if'state' in resume['data']['location']:
+     city    = resume['data']['location']['state']
+     print(f"City is :{city}")
+     x+=1
+    area=resume['data']['location']['raw_input']
+    print(f"adress :{area}")
+    x+=1
 
+# if 'work_experience' in resume['data']:
+#      job_titles=[]
+#      for i in range(len(resume['data']['work_experience'])):
+#          job_titles[i]= resume['data']['work_experience'][i]["job_title"]
+#
+#
+
+#pprint(resume)
 
 # pprint(all_redacted_resumes.as_dict())
 # pprint(redacted_resume.as_dict())
