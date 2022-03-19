@@ -504,12 +504,13 @@ class FileUploadView(APIView):
      type=openapi.TYPE_OBJECT,
      properties={
      'email': openapi.Schema(type=openapi.TYPE_STRING , description='email '),
-     'file' :  openapi.Schema(type=openapi.TYPE_STRING , description='.pdf or imgs '),
+     'file' :  openapi.Schema(type=openapi.TYPE_FILE , description='.pdf or imgs '),
      }),
      responses={201: FileSerializer , 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
         #print(dir(request.stream.body))
         context={}
+        #to retrieve email from url
         email = request.GET.get('email')
         print(request.data)
         #print(dir(request.stream))

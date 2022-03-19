@@ -18,14 +18,42 @@ with open(file_pth, "rb") as f:
 pprint(resume.as_dict())
 
 all_resumes = client.get_all_resumes()
-pprint(all_resumes.as_dict())
+#pprint(all_resumes.as_dict())
 identifier = 'zuDqhDNZ'
 identifier = 'NBxYdVlg'
 identifier = 'neuGGjlM'
 resume = client.get_resume(identifier=identifier)
+resume=resume.as_dict()
+#pprint(resume.as_dict())
+pprint(resume['data'].keys())
 
-print(resume.as_dict())
+if  resume['data']['name']:
+    firstname=resume['data']['name']['first']
+    lastname=resume['data']['name']['last']
+    rawname=resume['data']['name']['raw']
 
+print(f" fname :{firstname},Lname :{lastname},fullname :{rawname}")
+
+if  resume['data']['phone_numbers'] :
+    phonenumber=resume['data']['phone_numbers'][0]
+
+print(f"Phone number :{phonenumber}")
+
+if resume['data']['emails']:
+
+    email = resume['data']['emails'][0]
+
+pprint(f"email is {email}")
+
+if resume['data']['date_of_birth']:
+    birthdate=resume['data']['date_of_birth']
+print(f"Birth date is :{birthdate}")
+
+if  resume['data']['languages']:
+    languages= resume['data']['languages']
+    print(f"langauges  are : {languages}")
+
+print(resume['data']['skills'])
 # all_redacted_resumes = client.get_all_redacted_resumes()
 #
 # pprint(all_redacted_resumes.as_dict())
