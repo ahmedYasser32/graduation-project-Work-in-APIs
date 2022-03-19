@@ -20,19 +20,23 @@ pprint(resume.as_dict())
 all_resumes = client.get_all_resumes()
 #pprint(all_resumes.as_dict())
 #mo7amed cv
-#identifier = 'zuDqhDNZ'
+identifier = 'zuDqhDNZ'
+
 #sonni cv
-identifier = 'neuGGjlM'
+#identifier = 'neuGGjlM'
 
 resume = client.get_resume(identifier=identifier)
 
 resume=resume.as_dict()
 
-#pprint(resume.as_dict())
+pprint(resume.keys())
 
 pprint(resume['data'].keys())
 pprint(resume['meta'])
 x=0
+
+print(f"{resume['data']['is_resume_probability']*100}%")
+
 if 'name' in resume['data']:
 
     firstname = resume['data']['name']['first']
@@ -68,11 +72,20 @@ if 'skills' in resume['data']:
     x+=1
 
 if 'education' in resume['data']:
-    University         = resume['data']['education'][0]['organization']
-    education_level    = resume['data']['education'][0]['accreditation']['education']
-    year_of_graduation = resume['data']['education'][0]['dates']['completion_date'].split('-')[0]
-    x+=3
-    print(f" University :{University} , education level:{education_level},Year of graduation:{year_of_graduation}")
+    if 'organization' in resume['data']['education'][0]:
+        University     = resume['data']['education'][0]['organization']
+        print(f" University :{University} ")
+        x+=1
+    if 'accreditation' in resume['data']['education'][0]:
+        education_level    = resume['data']['education'][0]['accreditation']['education']
+        print(f"education level:{education_level}")
+        x+=1
+    if 'dates' in resume['data']['education'][0]:
+     year_of_graduation = resume['data']['education'][0]['dates']['completion_date'].split('-')[0]
+     print(f"Year of graduation:{year_of_graduation}")
+
+print(resume['data']['publications'])
+print(resume['data']['referees'])
 
 
 # pprint(all_redacted_resumes.as_dict())
