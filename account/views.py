@@ -503,7 +503,7 @@ class FileUploadView(APIView):
     @swagger_auto_schema(request_body=openapi.Schema(
      type=openapi.TYPE_OBJECT,
      properties={
-     'email': openapi.Schema(type=openapi.TYPE_STRING , description='email '),
+     'email': openapi.Schema(type=openapi.TYPE_STRING , description='email in the url'),
      'file' :  openapi.Schema(type=openapi.TYPE_FILE , description='.pdf or imgs '),
      }),
      responses={201: FileSerializer , 400 : 'Bad Request'})

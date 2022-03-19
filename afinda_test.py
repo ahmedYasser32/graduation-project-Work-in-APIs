@@ -3,7 +3,7 @@ start_time = time.time()
 from pathlib import Path
 from pprint import pprint
 from affinda import AffindaAPI, TokenCredential
-
+import pandas as pd
 token = "c66179de88e40f465ea1a25ad8c6115676bc0f5a"
 file_pth = Path("AhmedyasserCV.pdf")
 
@@ -19,43 +19,53 @@ pprint(resume.as_dict())
 
 all_resumes = client.get_all_resumes()
 #pprint(all_resumes.as_dict())
-identifier = 'zuDqhDNZ'
-identifier = 'NBxYdVlg'
+#mo7amed cv
+#identifier = 'zuDqhDNZ'
+#sonni cv
 identifier = 'neuGGjlM'
 resume = client.get_resume(identifier=identifier)
 resume=resume.as_dict()
 #pprint(resume.as_dict())
 pprint(resume['data'].keys())
+pprint(resume['meta'])
 
-if  resume['data']['name']:
+if 'name' in resume['data']:
+
     firstname=resume['data']['name']['first']
     lastname=resume['data']['name']['last']
     rawname=resume['data']['name']['raw']
+    print(f" fname :{firstname},Lname :{lastname},fullname :{rawname}")
 
-print(f" fname :{firstname},Lname :{lastname},fullname :{rawname}")
-
-if  resume['data']['phone_numbers'] :
+if  'phone_numbers' in resume['data'] :
     phonenumber=resume['data']['phone_numbers'][0]
+    print(f"Phone number :{phonenumber}")
 
-print(f"Phone number :{phonenumber}")
-
-if resume['data']['emails']:
-
+if 'emails' in resume['data']:
     email = resume['data']['emails'][0]
+    print(f"email is {email}")
 
-pprint(f"email is {email}")
-
-if resume['data']['date_of_birth']:
+if 'date_of_birth'  in resume['data']:
     birthdate=resume['data']['date_of_birth']
-print(f"Birth date is :{birthdate}")
+    print(f"Birth date is :{birthdate}")
 
-if  resume['data']['languages']:
+if  'languages' in resume['data']:
     languages= resume['data']['languages']
     print(f"langauges  are : {languages}")
 
-print(resume['data']['skills'])
-# all_redacted_resumes = client.get_all_redacted_resumes()
-#
+if 'skills' in resume['data']:
+    print(resume['data']['skills'])
+    skills_table = pd.DataFrame.from_dict(resume['data']['skills'])
+    print(skills_table)
+    skills_list=skills_table.name.values
+    skills=', '.join(map(str, skills_list))
+    print(f"Skills is {skills}")
+
+if 'education' in resume['data']:
+
+    organization = resume['data']
+
+
+
 # pprint(all_redacted_resumes.as_dict())
 # pprint(redacted_resume.as_dict())
 # redacted_resume = client.get_redacted_resume(identifier=identifier)
