@@ -23,47 +23,56 @@ all_resumes = client.get_all_resumes()
 #identifier = 'zuDqhDNZ'
 #sonni cv
 identifier = 'neuGGjlM'
+
 resume = client.get_resume(identifier=identifier)
+
 resume=resume.as_dict()
+
 #pprint(resume.as_dict())
+
 pprint(resume['data'].keys())
 pprint(resume['meta'])
-
+x=0
 if 'name' in resume['data']:
 
-    firstname=resume['data']['name']['first']
-    lastname=resume['data']['name']['last']
-    rawname=resume['data']['name']['raw']
+    firstname = resume['data']['name']['first']
+    lastname  = resume['data']['name']['last']
+    rawname   = resume['data']['name']['raw']
     print(f" fname :{firstname},Lname :{lastname},fullname :{rawname}")
-
+    x+=2
 if  'phone_numbers' in resume['data'] :
     phonenumber=resume['data']['phone_numbers'][0]
     print(f"Phone number :{phonenumber}")
+    x+=1
 
 if 'emails' in resume['data']:
     email = resume['data']['emails'][0]
     print(f"email is {email}")
-
+    x+=1
 if 'date_of_birth'  in resume['data']:
     birthdate=resume['data']['date_of_birth']
     print(f"Birth date is :{birthdate}")
-
+    x+=1
 if  'languages' in resume['data']:
     languages= resume['data']['languages']
     print(f"langauges  are : {languages}")
+    x+=1
 
 if 'skills' in resume['data']:
-    print(resume['data']['skills'])
+    #print(resume['data']['skills'])
     skills_table = pd.DataFrame.from_dict(resume['data']['skills'])
-    print(skills_table)
+    #print(skills_table)
     skills_list=skills_table.name.values
     skills=', '.join(map(str, skills_list))
     print(f"Skills is {skills}")
+    x+=1
 
 if 'education' in resume['data']:
-
-    organization = resume['data']
-
+    University         = resume['data']['education'][0]['organization']
+    education_level    = resume['data']['education'][0]['accreditation']['education']
+    year_of_graduation = resume['data']['education'][0]['dates']['completion_date'].split('-')[0]
+    x+=3
+    print(f" University :{University} , education level:{education_level},Year of graduation:{year_of_graduation}")
 
 
 # pprint(all_redacted_resumes.as_dict())
@@ -75,4 +84,5 @@ if 'education' in resume['data']:
 #all_reformatted_resumes = client.get_all_reformatted_resumes()
 
 #pprint(all_reformatted_resumes.as_dict())
-print("--- %s seconds ---" % (time.time() - start_time))
+print(f"{x} fields have been automatically filled")
+print("--- in %s seconds ---" % (time.time() - start_time))
