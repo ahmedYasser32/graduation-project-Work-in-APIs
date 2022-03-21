@@ -25,6 +25,7 @@ class Company_RegisterAPI(APIView):
     }),
     responses={200: CompanyRegistrationSerializer,400: 'Bad Request'})
     def post(self, request, *args, **kwargs):
+        print(request.data)
         context = {}
         email                 = request.data.get('email')
         email = email.lower() if email else None
@@ -84,6 +85,7 @@ class CompanyProfileAPI(APIView):
        }),
      responses={200: CompanyProfileSerializer,400: 'Error'})
     def post(self, request, *args, **kwargs):
+        print(request.data)
         context = {}
         print(request.data)
         email = request.data.get('email')
