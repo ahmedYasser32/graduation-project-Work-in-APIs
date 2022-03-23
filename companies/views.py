@@ -1,10 +1,12 @@
+
+from rest_framework.parsers import MultiPartParser, JSONParser
 from django.shortcuts import render
 from account.models import Account
 from companies.models import CompanyProfile
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from companies.serializers import CompanyRegistrationSerializer,CompanyProfileSerializer
+from companies.serializers import CompanyRegistrationSerializer,CompanyProfileSerializer, LogoSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
@@ -255,3 +257,48 @@ class CompanyProfileSetup(APIView):
             context = serializer.errors.copy()
             context['response'] = 'error'
             return Response(data=context)
+
+
+class LogoUploadView(APIView):
+
+    permission_classes = []
+    parser_class = (MultiPartParser, JSONParser)
+
+
+
+    @swagger_auto_schema(request_body=openapi.Schema(
+     type=openapi.TYPE_OBJECT,
+     properties={
+     'email': openapi.Schema(type=openapi.TYPE_STRING , description='email in the url'),
+     'logo' :  openapi.Schema(type=openapi.TYPE_FILE , description='.pdf or imgs '),
+     }),
+     responses={201: LogoSerializer , 400 : 'Bad Request'})
+    def post(self, request, *args, **kwargs):
+        #print(dir(request.stream.body))
+        context={}
+        #to retrieve email from url
+        email = request.GET.get('email')
+        print(request.data)
+        #print(dir(request.stream))
+
+        email = email.lower() if email else None
+        account = Account.objects.filter(email=email)
+
+        if account.count() == 0:
+            context['response'] = 'Error'
+            context['error_message'] = 'email not found'
+            return Response(data=context)
+
+        account = account[0]
+
+        context['file'] = request.FILES.get('logo')
+
+        file_serializer = LogoSerializer(account ,data=context)
+
+        if file_serializer.is_valid():
+            file_serializer.save()
+            context= {**context,**file_serializer.data.copy()}
+            context['response']    = "Success"
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

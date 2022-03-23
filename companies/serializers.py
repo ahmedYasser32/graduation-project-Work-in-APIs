@@ -30,5 +30,10 @@ class CompanyProfileSerializer(serializers.ModelSerializer):
 		model = CompanyProfile
 		fields = '__all__'
 
+class LogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['file']
+
 
 
