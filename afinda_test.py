@@ -20,10 +20,12 @@ pprint(resume.as_dict())
 all_resumes = client.get_all_resumes()
 #pprint(all_resumes.as_dict())
 #mo7amed cv
-#dentifier = 'zuDqhDNZ'
+#identifier = 'zuDqhDNZ'
 
 #sonni cv
 identifier = 'neuGGjlM'
+#ahmad identifier
+identifier= 'mqfFjAWv'
 
 resume = client.get_resume(identifier=identifier)
 
@@ -53,10 +55,13 @@ if 'emails' in resume['data']:
     email = resume['data']['emails'][0]
     print(f"email is {email}")
     x+=1
+
 if 'date_of_birth'  in resume['data']:
     birthdate=resume['data']['date_of_birth']
     print(f"Birth date is :{birthdate}")
     x+=1
+
+
 if  'languages' in resume['data']:
     languages= resume['data']['languages']
     print(f"langauges  are : {languages}")
@@ -72,14 +77,20 @@ if 'skills' in resume['data']:
     x+=1
 
 if 'education' in resume['data']:
-    if 'organization' in resume['data']['education'][0]:
-        University     = resume['data']['education'][0]['organization']
+    if 'organization' in resume['data']['education'][1]:
+        University     = resume['data']['education'][1]['organization']
         print(f" University :{University} ")
         x+=1
-    if 'accreditation' in resume['data']['education'][0]:
-        education_level    = resume['data']['education'][0]['accreditation']['education']
-        print(f"education level:{education_level}")
-        x+=1
+    if 'accreditation' in resume['data']['education'][1]:
+         if 'education_level' in resume['data']['education']:
+             education_level    = resume['data']['education'][1]['accreditation']['education']
+             print(f"education level:{education_level}")
+             x+=1
+             # if 'grade' in resume['data']['education'][1]['accreditation'] :
+             #     gpa = ['data']['education'][1]['accreditation']['grade']['value']
+             #     print(f"Gpa : {gpa}")
+             #     x+=1
+
 
     if 'dates' in resume['data']['education'][0]:
      year_of_graduation = resume['data']['education'][0]['dates']['completion_date'].split('-')[0]
@@ -99,23 +110,23 @@ if 'location' in resume['data']:
     print(f"adress :{area}")
     x+=1
 
-# if 'work_experience' in resume['data']:
-#      job_titles=[]
-#      for i in range(len(resume['data']['work_experience'])):
-#          job_titles[i]= resume['data']['work_experience'][i]["job_title"]
-#
-#
+if'work_experience' in  resume['data']:
+    if resume['data']['work_experience']:
+     job_title = resume['data']['work_experience'][0]['job_title']
+     x+=1
+     print(f"Job Title intrested in: {job_title}")
 
-#pprint(resume)
+if 'websites' in resume['data']:
+    if resume['data']['websites']:
+        website = resume['data']['websites'][0]
+        print(f"website: {website}")
+        x+=1
 
-# pprint(all_redacted_resumes.as_dict())
-# pprint(redacted_resume.as_dict())
-# redacted_resume = client.get_redacted_resume(identifier=identifier)
+if 'linkedin' in resume['data']:
+    linkedin = resume['data']['linkedin']
+    print(f"website: {linkedin}")
 
-#pprint(redacted_resume.as_dict())
-#pprint(reformatted_resume.as_dict())
-#all_reformatted_resumes = client.get_all_reformatted_resumes()
-
-#pprint(all_reformatted_resumes.as_dict())
 print(f"{x} fields have been automatically filled")
 print("--- in %s seconds ---" % (time.time() - start_time))
+pprint(resume)
+
