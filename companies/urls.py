@@ -8,3 +8,4 @@ urlpatterns = [
  path('Profile_setup/',CompanyProfileSetup.as_view()),
 path('upload_logo',LogoUploadView.as_view()),
 ]
+

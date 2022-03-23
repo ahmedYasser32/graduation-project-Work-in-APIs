@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
+from rest_framework import status
 # Register API
 class Company_RegisterAPI(APIView):
 
@@ -299,6 +299,6 @@ class LogoUploadView(APIView):
             file_serializer.save()
             context= {**context,**file_serializer.data.copy()}
             context['response']    = "Success"
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+            return Response(context, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
