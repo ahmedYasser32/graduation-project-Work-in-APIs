@@ -17,9 +17,9 @@ class CompanyRegistrationSerializer(serializers.ModelSerializer):
 	def	save(self) :
 
 		account = Account(
-		email=self.validated_data['email'])
+		email=self.validated_data['email'], is_company= True)
 		password = self.validated_data['password']
-		is_company= True
+
 		account.set_password(password)
 		account.save()
 		return account
