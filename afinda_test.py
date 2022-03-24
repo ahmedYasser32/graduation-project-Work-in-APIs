@@ -5,36 +5,41 @@ from pprint import pprint
 from affinda import AffindaAPI, TokenCredential
 import pandas as pd
 token = "c66179de88e40f465ea1a25ad8c6115676bc0f5a"
-file_pth = Path("AhmedyasserCV.pdf")
+#file_pth = Path("Marwancv.pdf")
 
 credential = TokenCredential(token=token)
 client = AffindaAPI(credential=credential)
 
-with open(file_pth, "rb") as f:
-    reformatted_resume = client.create_reformatted_resume(file=f, file_name=file_pth.name, resume_format='zuDqhDNZ')
-    redacted_resume = client.create_redacted_resume(file=f)
-    resume = client.create_resume(file=f)
+# with open(file_pth, "rb") as f:
+#     #reformatted_resume = client.create_reformatted_resume(file=f, file_name=file_pth.name, resume_format='zuDqhDNZ')
+#     resume = client.create_resume(file=f)
+#
 
-pprint(resume.as_dict())
-
-all_resumes = client.get_all_resumes()
+# pprint(resume.as_dict())
+#
+# all_resumes = client.get_all_resumes()
 #pprint(all_resumes.as_dict())
 #mo7amed cv
-#identifier = 'zuDqhDNZ'
+identifier = 'zuDqhDNZ'
 
 #sonni cv
-identifier = 'neuGGjlM'
+#identifier = 'neuGGjlM'
 #ahmad identifier
-identifier= 'mqfFjAWv'
+#identifier= 'mqfFjAWv'
+#aly cv
+identifier='HygHyXbd'
+#Marwancv
+#identifier= 'IYWDMHYX'
 
 resume = client.get_resume(identifier=identifier)
 
 resume=resume.as_dict()
 
-pprint(resume.keys())
+
 
 pprint(resume['data'].keys())
 pprint(resume['meta'])
+pprint(resume)
 x=0
 
 print(f"{resume['data']['is_resume_probability']}%")
@@ -46,15 +51,18 @@ if 'name' in resume['data']:
     rawname   = resume['data']['name']['raw']
     print(f" fname :{firstname},Lname :{lastname},fullname :{rawname}")
     x+=2
-if  'phone_numbers' in resume['data'] :
-    phonenumber=resume['data']['phone_numbers'][0]
-    print(f"Phone number :{phonenumber}")
-    x+=1
+
+if  'phone_numbers' in resume['data']:
+    if resume['data']['phone_numbers']:
+        phonenumber = resume['data']['phone_numbers'][0]
+        print(f"Phone number :{phonenumber}")
+        x+=1
 
 if 'emails' in resume['data']:
-    email = resume['data']['emails'][0]
-    print(f"email is {email}")
-    x+=1
+    if resume['data']['emails']:
+        email = resume['data']['emails'][0]
+        print(f"email is {email}")
+        x+=1
 
 if 'date_of_birth'  in resume['data']:
     birthdate=resume['data']['date_of_birth']
@@ -77,19 +85,19 @@ if 'skills' in resume['data']:
     x+=1
 
 if 'education' in resume['data']:
-    if 'organization' in resume['data']['education'][1]:
-        University     = resume['data']['education'][1]['organization']
+    if 'organization' in resume['data']['education'][0]:
+        University     = resume['data']['education'][0]['organization']
         print(f" University :{University} ")
         x+=1
-    if 'accreditation' in resume['data']['education'][1]:
+    if 'accreditation' in resume['data']['education'][0]:
          if 'education_level' in resume['data']['education']:
-             education_level    = resume['data']['education'][1]['accreditation']['education']
+             education_level    = resume['data']['education'][0]['accreditation']['education']
              print(f"education level:{education_level}")
              x+=1
-             # if 'grade' in resume['data']['education'][1]['accreditation'] :
-             #     gpa = ['data']['education'][1]['accreditation']['grade']['value']
-             #     print(f"Gpa : {gpa}")
-             #     x+=1
+             if 'grade' in resume['data']['education'][1]['accreditation'] :
+                  gpa = resume['data']['education'][1]['accreditation']['grade']['value']
+                  print(f"Gpa : {gpa}")
+                  x+=1
 
 
     if 'dates' in resume['data']['education'][0]:
@@ -111,10 +119,13 @@ if 'location' in resume['data']:
     x+=1
 
 if'work_experience' in  resume['data']:
+    job_title=[]
     if resume['data']['work_experience']:
-     job_title = resume['data']['work_experience'][0]['job_title']
      x+=1
-     print(f"Job Title intrested in: {job_title}")
+     for i in range(len( resume['data']['work_experience'])):
+         job_title = resume['data']['work_experience'][i]['job_title']
+
+         print(f"Job Title intrested in: {job_title}")
 
 if 'websites' in resume['data']:
     if resume['data']['websites']:
@@ -124,9 +135,9 @@ if 'websites' in resume['data']:
 
 if 'linkedin' in resume['data']:
     linkedin = resume['data']['linkedin']
-    print(f"website: {linkedin}")
+    print(f"linked in: {linkedin}")
 
 print(f"{x} fields have been automatically filled")
 print("--- in %s seconds ---" % (time.time() - start_time))
-pprint(resume)
+
 
