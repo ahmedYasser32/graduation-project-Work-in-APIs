@@ -1,4 +1,5 @@
 
+from mysite.tasks import CVParsing
 from rest_framework import status
 from account.models import Account,AccountCode,Profile
 from rest_framework import generics, permissions
@@ -525,7 +526,12 @@ class FileUploadView(APIView):
 
         account = account[0]
 
+
+        # file_pth = Path("Marwancv.pdf")
+
         context['file'] = request.FILES.get('file')
+        cv_parsing = CVParsing(context['file'])
+        cv_parsing.start()
 
         file_serializer = FileSerializer(account ,data=context)
 
@@ -533,6 +539,8 @@ class FileUploadView(APIView):
             file_serializer.save()
             context= {**context,**file_serializer.data.copy()}
             context['response']    = "Success"
+            cv_data=cv_parsing.join_with_return()
+            #print(cv_data)
             return Response(file_serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
