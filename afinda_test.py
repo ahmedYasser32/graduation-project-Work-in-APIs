@@ -19,7 +19,7 @@ client = AffindaAPI(credential=credential)
 #
 # all_resumes = client.get_all_resumes()
 #pprint(all_resumes.as_dict())
-#mo7amed cv
+#mo7amed cvS
 #identifier = 'zuDqhDNZ'
 #sonni cv
 #identifier = 'neuGGjlM'
@@ -31,7 +31,7 @@ client = AffindaAPI(credential=credential)
 #identifier= 'IYWDMHYX'
 
 #AHMAD LAST CV
-identifier='QbemXfNR'
+#identifier='QbemXfNR'
 
 resume = client.get_resume(identifier=identifier)
 
@@ -189,8 +189,6 @@ if'work_experience' in  resume['data']:
     job_title=[]
     if resume['data']['work_experience']:
         length =  len( resume['data']['work_experience'])
-
-
         x+=1
 
         for i in range(length):

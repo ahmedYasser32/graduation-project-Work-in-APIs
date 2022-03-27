@@ -1,4 +1,3 @@
-
 from mysite.tasks import CVParsing
 from rest_framework import status
 from account.models import Account,AccountCode,Profile
@@ -21,6 +20,7 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser,DataAndFiles, BaseParser
+import pandas as pd
 
 # Register API
 class RegisterAPI(APIView):
@@ -496,6 +496,15 @@ class UserProfileSetup(APIView):
 
 class FileUploadView(APIView):
 
+
+
+
+
+
+
+
+
+
     permission_classes = []
     parser_class = (MultiPartParser, JSONParser)
 
@@ -539,8 +548,10 @@ class FileUploadView(APIView):
             file_serializer.save()
             context= {**context,**file_serializer.data.copy()}
             context['response']    = "Success"
-            cv_data=cv_parsing.join_with_return()
+            cv_data = cv_parsing.join_with_return()
+            context.update(cv_data)
             #print(cv_data)
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+
+            return Response(context, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
