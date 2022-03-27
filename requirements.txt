@@ -79,3 +79,5 @@ ruamel.yaml
 ruamel.yaml.clib
 uritemplate
 cloudinary
+affinda
+pandas
