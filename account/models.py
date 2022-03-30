@@ -214,7 +214,7 @@ class Profile(models.Model):
 
 	skills=models.CharField(max_length=200,null=True)
 
-	birthdate = models.DateTimeField(null=True)
+	birthdate = models.DateField(null=True)
 
 	gender = models.CharField(max_length=15,choices=genders_choices,default="M")
 
