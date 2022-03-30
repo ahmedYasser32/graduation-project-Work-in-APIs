@@ -478,7 +478,7 @@ class UserProfileSetup(APIView):
         try:
             profile = account.profile
         except Account.profile.RelatedObjectDoesNotExist:
-            context = {"response":"error", "error_msg":"company profile not exist"}
+            context = {"response":"error", "error_msg":" profile not exist"}
             return Response(data=context)
 
         serializer=self.serializer_class(profile, data=data, partial=True)
