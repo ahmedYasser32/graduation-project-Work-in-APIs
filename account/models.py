@@ -205,7 +205,7 @@ class Profile(models.Model):
 
 	career_level = models.CharField(max_length=11,choices=career_level_choices,default="JR")
 
-	job_types = models.CharField(max_length=20,choices=job_types_choices,)
+	job_types = models.CharField(max_length=20,choices=job_types_choices,null=True)
 
 	careers_intrests = models.CharField(max_length=25,choices=intrested_careers_choices,default='SE')
 
