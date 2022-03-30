@@ -203,9 +203,9 @@ class Profile(models.Model):
 	phone_number = models.CharField(max_length=13,null=True)
 	job_title_looking_for   = models.CharField(max_length=30,null= True)
 
-	career_level = models.CharField(max_length=11,choices=career_level_choices,default="JR")
+	career_level = models.CharField(max_length=11,choices=career_level_choices,default="JR",)
 
-	job_types = models.CharField(max_length=20,choices=job_types_choices,null=True)
+	job_types = models.CharField(max_length=20,choices=job_types_choices,default='FT')
 
 	careers_intrests = models.CharField(max_length=25,choices=intrested_careers_choices,default='SE')
 
