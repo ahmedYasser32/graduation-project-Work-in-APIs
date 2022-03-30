@@ -201,6 +201,7 @@ class Profile(models.Model):
 
 	nationality  = models.CharField(max_length=20,null=True)
 	phone_number = models.CharField(max_length=13,null=True)
+
 	job_title_looking_for   = models.CharField(max_length=30,null= True)
 
 	career_level = models.CharField(max_length=11,choices=career_level_choices,default="JR",)

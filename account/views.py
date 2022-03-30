@@ -38,7 +38,7 @@ class RegisterAPI(APIView):
      responses={200: RegistrationSerializer, 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
         print(f'\n{request.data}')
-        print(request.data.get('email````'))
+        print(request.data.get('email'))
         context = {}
         email = request.data.get('email').lower()
 
@@ -386,6 +386,7 @@ def reset_password(request, token):
 
 
 class UserProfileAPI(APIView):
+
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = UserProfileSerializer
@@ -506,16 +507,8 @@ class UserProfileSetup(APIView):
             context['response'] = 'error'
             return Response(data=context)
 
+
 class FileUploadView(APIView):
-
-
-
-
-
-
-
-
-
 
     permission_classes = []
     parser_class = (MultiPartParser, JSONParser)
