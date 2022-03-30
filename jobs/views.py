@@ -1,4 +1,23 @@
-from django.shortcuts import render
+from mysite.tasks import CVParsing
+from rest_framework import status
+from account.models import Account,AccountCode,Profile
+from rest_framework import generics, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from rest_framework.decorators import *
+from account.serializers import *
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
+from cryptography.fernet import InvalidToken
+from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
+from cryptography.fernet import Fernet
+from mysite.tasks import SendMail
+from rest_framework.permissions import IsAuthenticated
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser,DataAndFiles, BaseParser
 from jobs.models import Jobs
 from jobs.serializers import JobSerializer
 
