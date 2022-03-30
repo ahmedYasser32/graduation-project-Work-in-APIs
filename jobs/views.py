@@ -28,10 +28,11 @@ class JobCreation(APIView):
     serializer_class           = JobSerializer
 
 
-    @swagger_auto_schema(request_body=openapi.Schema(
+    @swagger_auto_schema(    operation_description="headers = {'Authorization': 'Token {token}'}", request_body=openapi.Schema(
      type=openapi.TYPE_OBJECT,
-     properties={
-        'is_authenticates': openapi.Schema(type=openapi.TYPE_STRING , description='email'),
+
+    properties={
+        'Same data of the response example': openapi.Schema(type=openapi.TYPE_STRING , description='7abeby'),
      }),
      responses={200: serializer_class, 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
