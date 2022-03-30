@@ -37,7 +37,7 @@ class RegisterAPI(APIView):
      }),
      responses={200: RegistrationSerializer, 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
-        print(request.data)
+        print(f'\n{request.data}')
         print(request.data.get('email````'))
         context = {}
         email = request.data.get('email').lower()
@@ -88,6 +88,7 @@ class LoginAPI(APIView):
       }),
 	  responses={200: RegistrationSerializer,400: 'Bad Request'})
     def post(self, request, *args, **kwargs):
+        print(f'\n{request.data}')
         context = {}
         email = request.data.get('email')
         password = request.data.get('password')
@@ -128,7 +129,9 @@ class LoginAPI(APIView):
 @permission_classes([IsAuthenticated])
 
 def check_verification_mail(request):
+
 	if request.method == 'POST':
+		print(f'\n{request.data}')
 		data = {}
 		email = request.data.get('email').lower()
 		try:
@@ -152,6 +155,7 @@ def check_verification_mail(request):
 @authentication_classes([])
 @permission_classes([IsAuthenticated])
 def user_verification(request):
+	print(f'\n{request.data}')
 	data = {}
 	if request.method == 'POST':
 
@@ -198,6 +202,7 @@ def encryption(token, mode, key):
 @permission_classes([])
 @authentication_classes([])
 def check_reset_password_mail(request):
+	print(f'\n{request.data}')
 	if request.method == 'POST':
 		data = {}
 		email = request.data.get('email').lower()
@@ -287,6 +292,9 @@ def check_reset_password_mail(request):
 @permission_classes([])
 @authentication_classes([])
 def check_reset_password_code(request, token):
+
+	print(f'\n{request.data}')
+	print(f'token entered in url: {token}')
 	data = {}
 	email = request.data.get('email').lower()
 	try:
@@ -326,6 +334,8 @@ def check_reset_password_code(request, token):
 @permission_classes([])
 @authentication_classes([])
 def reset_password(request, token):
+	print(f'\n{request.data}')
+	print(f'token entered in url: {token}')
 	data = {}
 	email = request.data.get('email')
 	try:
@@ -388,6 +398,7 @@ class UserProfileAPI(APIView):
      }),
      responses={200: UserProfileSerializer, 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
+        print(f'\n{request.data}')
         context  = {}
         email    = request.data.get('email')
         email    = email.lower() if email else None
@@ -443,6 +454,7 @@ class UserProfileSetup(APIView):
      }),
      responses={200: UserProfileSerializer, 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
+        print(f'\n{request.data}')
 
         context = {}
         email = request.data.get('email')
@@ -518,6 +530,7 @@ class FileUploadView(APIView):
      }),
      responses={201: FileSerializer , 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
+        print(f'\n{request.data}')
         #print(dir(request.stream.body))
         context={}
         #to retrieve email from url

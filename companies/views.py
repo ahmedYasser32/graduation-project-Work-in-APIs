@@ -27,7 +27,7 @@ class Company_RegisterAPI(APIView):
     }),
     responses={200: CompanyRegistrationSerializer,400: 'Bad Request'})
     def post(self, request, *args, **kwargs):
-        print(request.data)
+        print(f'\n{request.data}')
         context = {}
         email                 = request.data.get('email')
         email = email.lower() if email else None
@@ -87,7 +87,7 @@ class CompanyProfileAPI(APIView):
        }),
      responses={200: CompanyProfileSerializer,400: 'Error'})
     def post(self, request, *args, **kwargs):
-        print(request.data)
+        print(f'\n{request.data}')
         context = {}
         print(request.data)
         email = request.data.get('email')
@@ -158,6 +158,7 @@ class Company_LoginAPI(APIView):
     }),
     responses={200: CompanyRegistrationSerializer,400: 'Bad Request'})
     def post(self, request, *args, **kwargs):
+        print(f'\n{request.data}')
         context = {}
         email = request.data.get('email')
         password = request.data.get('password')
@@ -204,6 +205,7 @@ class CompanyProfileSetup(APIView):
      }),
     responses={200: CompanyProfileSerializer,400: 'Error'})
     def post(self, request, *args, **kwargs):
+        print(f'\n{request.data}')
 
         context = {}
         email = request.data.get('email')
@@ -274,6 +276,7 @@ class LogoUploadView(APIView):
      }),
      responses={201: LogoSerializer , 400 : 'Bad Request'})
     def post(self, request, *args, **kwargs):
+        print(f'\n{request.data}')
         #print(dir(request.stream.body))
         context={}
         #to retrieve email from url
