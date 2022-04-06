@@ -3,6 +3,6 @@ from jobs.models import Jobs
 
 class JobSerializer(serializers.ModelSerializer):
        class Meta:
-        model = Jobs
-        fields =['all']
+        model  = Jobs
+        exclude =['applicants']
 
