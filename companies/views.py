@@ -1,4 +1,3 @@
-
 from rest_framework.parsers import MultiPartParser, JSONParser
 from django.shortcuts import render
 from account.models import Account
@@ -12,6 +11,8 @@ from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from companies.serializers import ReviewSereializier
 # Register API
 class Company_RegisterAPI(APIView):
 
@@ -305,3 +306,53 @@ class LogoUploadView(APIView):
             return Response(context, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ReviewApi(APIView):
+
+    authentication_classes     = []
+    permission_classes         = [IsAuthenticated]
+    serializer_class           = ReviewSereializier
+
+    def post(self, request, *args, company_email):
+
+      if  request.user.is_company:
+            context['response'] = 'error'
+            context['error'] = 'you are not allowed to access this API'
+
+            return Response(data=context)
+
+      fname = request.user.firstname
+      lname = request.user.lastname
+      name=fname+' '+lname
+      context['name'] = name
+      data    =  request.data.copy()
+
+      #account = Account.objects.filter(email=company_email)
+      company = CompanyProfile.objects.filter(user__email=company_email)
+
+      if company.count() > 0:
+          context['company'] = company[0]
+
+      else:
+          context['response'] = 'error'
+          context['error'] = 'mail does not exist'
+          return Response(data=context)
+
+
+      serializer = self.serializer_class(data=data)
+
+      if serializer.is_valid():
+            #if valid save object and send response
+            serializer.save()
+            #** turn dictioanries into vars and copy values from serailizer
+            context= {**context,**serializer.data.copy()}
+            context['response']    = "Success"
+
+            return Response(data=context)
+
+
+
+
+
+
+

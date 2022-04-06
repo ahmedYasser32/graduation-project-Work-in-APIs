@@ -24,7 +24,7 @@ from jobs.serializers import JobSerializer
 class JobCreation(APIView):
 
     authentication_classes     = []
-    permission_classes         = []
+    permission_classes         = [IsAuthenticated]
     serializer_class           = JobSerializer
 
 
@@ -35,6 +35,7 @@ class JobCreation(APIView):
         'Same data of the response example': openapi.Schema(type=openapi.TYPE_STRING , description='7abeby'),
      }),
      responses={200: serializer_class, 400 : 'Bad Request'})
+
     def post(self, request, *args, **kwargs):
 
 

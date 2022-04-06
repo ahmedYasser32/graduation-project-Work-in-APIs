@@ -10,6 +10,7 @@ from rest_framework.authtoken.models import Token
 import re
 from cloudinary.models import CloudinaryField
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
@@ -18,7 +19,12 @@ from django.core.exceptions import ValidationError
 
 #remove class CompanyAccount(AbstractBaseUser):
 
+
+
+
+
 class CompanyProfile(models.Model):
+    #review = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
 
     #Lists of choices
     industries         =  [("T","Tech"),("ARCH","Architecture")
@@ -82,6 +88,13 @@ class CompanyProfile(models.Model):
 
 
 
+class Review(models.Model) :
+
+    rating  =  models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], blank=True, null=True)
+    review  =  models.CharField(max_length=500,null=True)
+    user    =  models.CharField(max_length=25)
+    date    =  models.DateField(auto_now_add=True)
+    company = models.ForeignKey(CompanyProfile,on_delete=models.CASCADE)
 
 
 

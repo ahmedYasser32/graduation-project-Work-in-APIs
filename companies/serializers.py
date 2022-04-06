@@ -1,6 +1,6 @@
-from rest_framework import serializers
-
-from account.models import Account
+from rest_framework   import serializers
+from companies.models import Review
+from account.models   import Account
 from companies.models import CompanyProfile
 
 
@@ -34,6 +34,11 @@ class LogoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['file']
+
+class ReviewSereializier(serializers.ModelSerializer):
+	class Meta :
+		model   = Review
+		fields  = '__all__'
 
 
 
