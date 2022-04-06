@@ -35,7 +35,7 @@ class LogoSerializer(serializers.ModelSerializer):
         model = Account
         fields = ['file']
 
-class ReviewSereializier(serializers.ModelSerializer)
+class ReviewSereializier(serializers.ModelSerializer):
 	class Meta :
 		model   = Review
 		fields  = '__all__'

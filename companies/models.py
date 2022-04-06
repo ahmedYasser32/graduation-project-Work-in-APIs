@@ -14,21 +14,17 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 
+
 #remove class MyAccountManager(BaseUserManager):
 
 #remove class CompanyAccount(AbstractBaseUser):
 
 
-class Review(models.Model) :
-
-    rating =  models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], blank=True, null=True)
-    review =  models.CharField(max_length=500,null=True)
-    user   =  models.CharField(max_length=25)
-    date   =  models.Date(auto_now_add=True)
 
 
 
 class CompanyProfile(models.Model):
+    #review = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
 
     #Lists of choices
     industries         =  [("T","Tech"),("ARCH","Architecture")
@@ -92,6 +88,13 @@ class CompanyProfile(models.Model):
 
 
 
+class Review(models.Model) :
+
+    rating  =  models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], blank=True, null=True)
+    review  =  models.CharField(max_length=500,null=True)
+    user    =  models.CharField(max_length=25)
+    date    =  models.DateField(auto_now_add=True)
+    company = models.ForeignKey(CompanyProfile,on_delete=models.CASCADE)
 
 
 

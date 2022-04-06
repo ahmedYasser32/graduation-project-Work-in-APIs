@@ -313,3 +313,46 @@ class ReviewApi(APIView):
     permission_classes         = [IsAuthenticated]
     serializer_class           = ReviewSereializier
 
+    def post(self, request, *args, company_email):
+
+      if  request.user.is_company:
+            context['response'] = 'error'
+            context['error'] = 'you are not allowed to access this API'
+
+            return Response(data=context)
+
+      fname = request.user.firstname
+      lname = request.user.lastname
+      name=fname+' '+lname
+      context['name'] = name
+      data    =  request.data.copy()
+
+      #account = Account.objects.filter(email=company_email)
+      company = CompanyProfile.objects.filter(user__email=company_email)
+
+      if company.count() > 0:
+          context['company'] = company[0]
+
+      else:
+          context['response'] = 'error'
+          context['error'] = 'mail does not exist'
+          return Response(data=context)
+
+
+      serializer = self.serializer_class(data=data)
+
+      if serializer.is_valid():
+            #if valid save object and send response
+            serializer.save()
+            #** turn dictioanries into vars and copy values from serailizer
+            context= {**context,**serializer.data.copy()}
+            context['response']    = "Success"
+
+            return Response(data=context)
+
+
+
+
+
+
+
