@@ -1,4 +1,3 @@
-
 from rest_framework.parsers import MultiPartParser, JSONParser
 from django.shortcuts import render
 from account.models import Account
@@ -12,6 +11,8 @@ from django.contrib.auth import authenticate
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from companies.serializers import ReviewSereializier
 # Register API
 class Company_RegisterAPI(APIView):
 
@@ -305,3 +306,10 @@ class LogoUploadView(APIView):
             return Response(context, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ReviewApi(APIView):
+
+    authentication_classes     = []
+    permission_classes         = [IsAuthenticated]
+    serializer_class           = ReviewSereializier
+
