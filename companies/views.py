@@ -1,7 +1,7 @@
 from rest_framework.parsers import MultiPartParser, JSONParser
 from django.shortcuts import render
 from account.models import Account
-from companies.models import CompanyProfile
+from companies.models import CompanyProfile, Review
 from rest_framework import generics, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -324,7 +324,7 @@ class ReviewApi(APIView):
       fname = request.user.firstname
       lname = request.user.lastname
       name=fname+' '+lname
-      context['name'] = name
+      context['user'] = name
       data    =  request.data.copy()
 
       #account = Account.objects.filter(email=company_email)
@@ -349,6 +349,28 @@ class ReviewApi(APIView):
             context['response']    = "Success"
 
             return Response(data=context)
+
+    def get(self,request,company_email):
+
+        company = CompanyProfile.objects.filter(user__email=company_email)
+        if company.count() > 0:
+          context['company'] = company[0]
+
+        else:
+          context['response'] = 'error'
+          context['error'] = 'mail does not exist'
+          return Response(data=context)
+
+        reviews = Review.objects.filter(company=company)
+        serializer = self.serializer_class(reviews,many=True)
+        context= {**context,**serializer.data.copy()}
+        context['response']='Sucess'
+
+
+        return Response(data=context)
+
+
+
 
 
 
