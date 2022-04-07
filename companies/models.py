@@ -92,9 +92,9 @@ class Review(models.Model) :
 
     rating  =  models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], blank=True, null=True)
     review  =  models.CharField(max_length=500,null=True)
-    user    =  models.CharField(max_length=25)
+    user    =  models.CharField(max_length=25, default='')
     date    =  models.DateField(auto_now_add=True)
-    company = models.ForeignKey(CompanyProfile,on_delete=models.CASCADE)
+    company = models.ForeignKey(CompanyProfile,on_delete=models.CASCADE, blank=True)
 
 
 

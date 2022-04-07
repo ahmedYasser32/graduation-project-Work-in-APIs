@@ -309,46 +309,57 @@ class LogoUploadView(APIView):
 
 class ReviewApi(APIView):
 
-    authentication_classes     = []
+    #authentication_classes     = []
     permission_classes         = [IsAuthenticated]
     serializer_class           = ReviewSereializier
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'review': openapi.Schema(type=openapi.TYPE_STRING, description='review'),
+                'rating': openapi.Schema(type=openapi.TYPE_INTEGER, description='rating')
+            }),
+        responses={201: ReviewSereializier, 400: 'Bad Request'})
     def post(self, request, *args, company_email):
-
-      if  request.user.is_company:
+        context = {}
+        if  request.user.is_company:
             context['response'] = 'error'
             context['error'] = 'you are not allowed to access this API'
 
             return Response(data=context)
 
-      fname = request.user.firstname
-      lname = request.user.lastname
-      name=fname+' '+lname
-      context['user'] = name
-      data    =  request.data.copy()
+        fname = request.user.firstname
+        lname = request.user.lastname
+        name=fname+' '+lname
+        data = request.data.copy()
+        data['user'] = name
 
-      #account = Account.objects.filter(email=company_email)
-      company = CompanyProfile.objects.filter(user__email=company_email)
+        #account = Account.objects.filter(email=company_email)
+        company = CompanyProfile.objects.filter(user__email=company_email)
 
-      if company.count() > 0:
-          context['company'] = company[0]
+        if company.count() > 0:
+            data['company'] = company[0]
 
-      else:
-          context['response'] = 'error'
-          context['error'] = 'mail does not exist'
-          return Response(data=context)
+        else:
+            context['response'] = 'error'
+            context['error'] = 'mail does not exist'
+            return Response(data=context)
 
 
-      serializer = self.serializer_class(data=data)
+        serializer = self.serializer_class(data=data)
 
-      if serializer.is_valid():
+        if serializer.is_valid():
             #if valid save object and send response
             serializer.save()
             #** turn dictioanries into vars and copy values from serailizer
+            context['response'] = "Success"
             context= {**context,**serializer.data.copy()}
-            context['response']    = "Success"
 
             return Response(data=context)
+        context['response'] = 'error'
+        context.update(serializer.errors)
+        return Response(context)
 
     def get(self,request,company_email):
 
@@ -364,7 +375,7 @@ class ReviewApi(APIView):
         reviews = Review.objects.filter(company=company)
         serializer = self.serializer_class(reviews,many=True)
         context= {**context,**serializer.data.copy()}
-        context['response']='Sucess'
+        context['response']='success'
 
 
         return Response(data=context)
