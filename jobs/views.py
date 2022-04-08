@@ -77,18 +77,19 @@ class JobDetail (APIView):
 
 
      def get(self, request, job):
-
+        context={}
         job = Jobs.objects.filter(pk=job)
         if job.count() == 0:
             context['response'] = 'error'
             context['error'] = 'job doesnt exist'
             return Response(data=context)
 
-        serializer = self.serializer_class(job)
+        job_detail=job[0]
+
+
+        serializer = self.serializer_class(job_detail)
         context= {**context,**serializer.data.copy()}
         context['response']='success'
-
-
         return Response(data=context)
 
 
