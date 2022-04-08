@@ -77,6 +77,7 @@ class JobDetail (APIView):
 
 
      def get(self, request, job):
+
         context={}
         job = Jobs.objects.filter(pk=job)
         if job.count() == 0:
@@ -91,6 +92,48 @@ class JobDetail (APIView):
         context= {**context,**serializer.data.copy()}
         context['response']='success'
         return Response(data=context)
+
+
+class ApplyView(APIView):
+
+
+    authentication_classes     = [IsAuthenticated]
+    permission_classes         = []
+    serializer_class           = JobSerializer
+
+    def post(self, request, job) :
+        context = {}
+        job = Jobs.objects.filter(pk=job)
+        if job.count() == 0:
+            context['response'] = 'error'
+            context['error']    = 'job doesnt exist'
+            return Response(data=context)
+
+        user = request.user.profile
+
+        # set relation
+        job[0].applicants.add(user)
+
+        context['user'] = user
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            #if valid save object and send response
+            serializer.save()
+            #** turn dictioanries into vars and copy values from serailizer
+            context= {**context,**serializer.data.copy()}
+            context['response']    = "Success"
+
+            return Response(data=context)
+
+
+
+
+
+
+
+
+
+
 
 
 
