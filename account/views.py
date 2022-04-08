@@ -558,6 +558,7 @@ class FileUploadView(APIView):
             context.update(cv_data)
             #print(cv_data)
 
-            return Response(context, status=status.HTTP_201_CREATED)
+            print(context)
+            return Response(context)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
