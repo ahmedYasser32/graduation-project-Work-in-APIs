@@ -34,6 +34,7 @@ class JobCreation(APIView):
     properties={
         'Same data of the response example': openapi.Schema(type=openapi.TYPE_STRING , description='7abeby'),
      }),
+
      responses={200: serializer_class, 400 : 'Bad Request'})
 
     def post(self, request, *args, **kwargs):
@@ -47,7 +48,7 @@ class JobCreation(APIView):
 
 
         data = request.data.copy()
-        context['company'] =  request.user.companyprofile
+        context['company'] = request.user.companyprofile
         #set relation
         serializer = self.serializer_class(data=data)
 
@@ -63,6 +64,31 @@ class JobCreation(APIView):
 
 
         else:
+
             context = serializer.errors.copy()
             context['response'] = 'error'
             return Response(data=context)
+
+class JobDetail (APIView):
+     authentication_classes     = []
+     permission_classes         = []
+     serializer_class           = JobSerializer
+
+
+     def get(self, request, job):
+
+        job = Jobs.objects.filter(pk=job)
+        if job.count() == 0:
+            context['response'] = 'error'
+            context['error'] = 'job doesnt exist'
+            return Response(data=context)
+
+        serializer = self.serializer_class(job)
+        context= {**context,**serializer.data.copy()}
+        context['response']='success'
+
+
+        return Response(data=context)
+
+
+
