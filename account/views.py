@@ -562,3 +562,23 @@ class FileUploadView(APIView):
             return Response(context)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserDetailView(APIView):
+
+    permission_classes = []
+    serializer_class = UserProfileSerializer
+
+    def post(self, request, email):
+        profile = Profile.objects.select_related('user').filter(user__email = email).first()
+        if not profile:
+            return Response({'response': 'error', 'error_msg':'invalid email'})
+        context = self.serializer_class(profile).data
+        context['firstname'] = profile.user.firstname
+        context['lastname'] = profile.user.lastname
+        context['email'] = email
+        return Response(context)
+
+
+
+
+

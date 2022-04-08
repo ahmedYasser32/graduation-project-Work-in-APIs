@@ -14,5 +14,6 @@ urlpatterns = [
  path('user_profile/',UserProfileAPI.as_view()),
  path('user_profile_update/',UserProfileSetup.as_view()),
  path('upload_file',FileUploadView.as_view()),
+ path('user_detail/<str:email>',UserDetailView.as_view())
 ]
 
