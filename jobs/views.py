@@ -94,13 +94,21 @@ class JobDetail (APIView):
         return Response(data=context)
 
 
-class ApplyView(APIView):
+class JobApply(APIView):
 
 
     authentication_classes     = [IsAuthenticated]
     permission_classes         = []
     serializer_class           = JobSerializer
 
+    @swagger_auto_schema(
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'job pk': openapi.Schema(type=openapi.TYPE_STRING, description=' In url'),
+
+            }),
+        responses={201: JobSerializer, 400: 'Bad Request'})
     def post(self, request, job) :
         context = {}
         job = Jobs.objects.filter(pk=job)
