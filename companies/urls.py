@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.urls import path, include
 from companies.views import *
+
 urlpatterns = [
 
  path('register/',Company_RegisterAPI.as_view()),

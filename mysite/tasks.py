@@ -4,6 +4,7 @@ import threading
 import pandas as pd
 from affinda import AffindaAPI, TokenCredential
 class SendMail(threading.Thread):
+
     def __init__(self, subject, body, to):
         self.subject = subject
         self.body = body
