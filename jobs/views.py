@@ -70,6 +70,7 @@ class JobCreation(APIView):
             return Response(data=context)
 
 class JobDetail (APIView):
+
      authentication_classes     = []
      permission_classes         = []
      serializer_class           = JobSerializer

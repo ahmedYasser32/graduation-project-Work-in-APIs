@@ -5,5 +5,6 @@ from jobs.views import *
 urlpatterns = [
 
  path('create_job',JobCreation.as_view()),
+ path('job_detail/<int:job>',JobDetail.as_view())
 
 ]
