@@ -110,6 +110,7 @@ class JobApply(APIView):
             }),
         responses={201: JobSerializer, 400: 'Bad Request'})
     def post(self, request, job) :
+
         context = {}
         job = Jobs.objects.filter(pk=job)
         if job.count() == 0:
