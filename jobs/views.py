@@ -102,7 +102,7 @@ class JobApply(APIView):
     serializer_class           = JobSerializer
 
     @swagger_auto_schema(
-        request_body=openapi.Schema(
+        request_body=openapi.Schema( operation_description="headers = {'Authorization': 'Token {token}'} User token",
             type=openapi.TYPE_OBJECT,
             properties={
                 'job pk': openapi.Schema(type=openapi.TYPE_STRING, description=' In url'),
