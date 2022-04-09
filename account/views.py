@@ -572,7 +572,7 @@ class UserDetailView(APIView):
         profile = Profile.objects.select_related('user').filter(user__email = email).first()
         if not profile:
             return Response({'response': 'error', 'error_msg':'invalid email'})
-        context = self.serializer_class(profile).data().copy()
+        context = self.serializer_class(profile).data.copy()
         context['firstname'] = profile.user.firstname
         context['lastname'] = profile.user.lastname
         context['email'] = email
