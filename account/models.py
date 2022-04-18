@@ -204,11 +204,11 @@ class Profile(models.Model):
 
 	job_title_looking_for   = models.CharField(max_length=30,null= True)
 
-	career_level = models.CharField(max_length=11,choices=career_level_choices,default="JR",)
+	career_level = models.CharField(max_length=11,default="JR")
 
-	job_types = models.CharField(max_length=20,choices=job_types_choices,default='FT')
+	job_types = models.CharField(max_length=20,default='FT')
 
-	careers_intrests = models.CharField(max_length=25,choices=intrested_careers_choices,default='SE')
+	careers_intrests = models.CharField(max_length=25,default='SE')
 
 	min_salary =models.PositiveIntegerField(null=True)
 
@@ -228,17 +228,18 @@ class Profile(models.Model):
 
 	years_of_experience=models.PositiveIntegerField(null=True)
 
-	education_level = models.CharField(max_length=15,choices=education_level_choices,default="BCH")
+	education_level = models.CharField(max_length=15,default="BCH")
 
-	study_fields     = models.CharField(max_length=15,choices=study_Field_choices,default="ENG")
+	study_fields     = models.CharField(max_length=15,default="ENG")
 
 	uni = models.CharField(max_length=200,null=True)
+	specialities = models.CharField(max_length=500,null=True)
 
 	yearofgrad= models.PositiveSmallIntegerField(null=True,blank=True)
 
 	gpa = models.CharField(max_length=4,null=True)
 
-	languages= models.CharField(max_length=20,choices=langs,default="En")
+	languages= models.CharField(max_length=20,default="En")
 	language_level= models.CharField(max_length=20,null=True,blank=True)
 
 

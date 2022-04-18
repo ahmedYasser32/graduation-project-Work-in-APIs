@@ -42,13 +42,13 @@ class CompanyProfile(models.Model):
     #image attribute
     logo               = models.BinaryField(null=True, editable=True)
     content_type       = models.CharField(max_length=256, null=True, help_text='The MIMEType of the file')
-    size_of_company    = models.CharField(max_length=25,choices=company_sizes,default='SB')
+    size_of_company    = models.CharField(max_length=25,default='SB')
     company_name       = models.CharField(max_length=25,null = True)
     company_info       = models.CharField(max_length=1500,null = True)
 
 
-    company_industries = models.CharField(max_length=25,choices=industries,default='T')
-    company_type       = models.CharField(max_length=25,choices=company_types,default='PRV')
+    company_industries = models.CharField(max_length=25,default='T')
+    company_type       = models.CharField(max_length=25,default='PRV')
     mobile_number      = models.CharField(max_length=13,null=True)
     job_title          = models.CharField(max_length=25,null=True)
     no_of_employees    = models.CharField(max_length=9,null=True)
