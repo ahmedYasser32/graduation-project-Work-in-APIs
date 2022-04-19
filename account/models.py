@@ -200,15 +200,16 @@ class Profile(models.Model):
 	langs =[("DU","Deutsch"),("FR","French"),("En","English"),("AR","Arabic")]
 
 	nationality  = models.CharField(max_length=20,null=True)
+
 	phone_number = models.CharField(max_length=13,null=True)
 
 	job_title_looking_for   = models.CharField(max_length=30,null= True)
 
-	career_level = models.CharField(max_length=11,default="JR")
+	career_level = models.CharField(max_length=50,default="JR",null=True)
 
-	job_types = models.CharField(max_length=20,default='FT')
+	job_types = models.CharField(max_length=50,default='FT',null=True)
 
-	careers_intrests = models.CharField(max_length=25,default='SE')
+	careers_intrests = models.CharField(max_length=50,default='SE')
 
 	min_salary =models.PositiveIntegerField(null=True)
 
@@ -228,18 +229,20 @@ class Profile(models.Model):
 
 	years_of_experience=models.PositiveIntegerField(null=True)
 
-	education_level = models.CharField(max_length=15,default="BCH")
+	education_level = models.CharField(max_length=50,default="BCH",null=True)
 
-	study_fields     = models.CharField(max_length=15,default="ENG")
+	study_fields     = models.CharField(max_length=50,default="ENG",null=True)
 
-	uni = models.CharField(max_length=200,null=True)
+	uni = models.CharField(max_length=50,null=True)
+
 	specialities = models.CharField(max_length=500,null=True)
 
 	yearofgrad= models.PositiveSmallIntegerField(null=True,blank=True)
 
 	gpa = models.CharField(max_length=4,null=True)
 
-	languages= models.CharField(max_length=20,default="En")
+	languages= models.CharField(max_length=20,default="En",null=True)
+
 	language_level= models.CharField(max_length=20,null=True,blank=True)
 
 
