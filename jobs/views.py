@@ -127,6 +127,7 @@ class JobApply(APIView):
 
         # set relation
         job[0].applicants.add(user)
+        job.applicantscount = job.applicantscount + 1
 
         context['user'] = user
         serializer = self.serializer_class(data=data)

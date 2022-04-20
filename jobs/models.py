@@ -14,6 +14,7 @@ class Jobs(models.Model):
     isConfidential          =  models.BooleanField(default=True)
     applicants              =  models.ManyToManyField(Profile)
     created_at              =  models.DateTimeField(auto_now_add=True,null=True)
+    applicantscount         = models.PositiveSmallIntegerField(default=0)
 
 
 

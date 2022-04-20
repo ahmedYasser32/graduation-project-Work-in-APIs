@@ -40,8 +40,7 @@ class CompanyProfile(models.Model):
 
     user               = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
     #image attribute
-    logo               = models.BinaryField(null=True, editable=True)
-    content_type       = models.CharField(max_length=256, null=True, help_text='The MIMEType of the file')
+
     size_of_company    = models.CharField(max_length=25,default='SB')
     company_name       = models.CharField(max_length=25,null = True)
     company_info       = models.CharField(max_length=1500,null = True)
@@ -72,19 +71,17 @@ class CompanyProfile(models.Model):
     def clean(self):
         if not bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?',self.job_title)):
              raise ValidationError({'job_title': "names must not contain digits!"})
-        else:
-             return self.job_title
+
+
 
         if not bool(re.fullmatch('/^\d[\d+]*$',self.no_of_employees)):
              raise ValidationError({'no_of_employees': "only numbers are allowed!"})
-        else:
-            return self.no_of_employees
+
+
 
         if not bool(re.fullmatch('/^\d[\d+]*$',self.mobile_number)):
              raise ValidationError({'mobile_number': "only numbers are allowed!"})
 
-        else:
-            return self.mobile_number
 
 
 
