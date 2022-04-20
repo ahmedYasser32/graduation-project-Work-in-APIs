@@ -313,7 +313,7 @@ class ReviewApi(APIView):
     permission_classes         = [IsAuthenticated]
     serializer_class           = ReviewSereializier
 
-    @swagger_auto_schema(
+    @swagger_auto_schema(  operation_description = " headers = {'Authorization': ' Token {token}'}  User token, and Email of the Company in the url",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={

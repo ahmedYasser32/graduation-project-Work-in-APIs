@@ -28,7 +28,7 @@ class JobCreation(APIView):
     serializer_class           = JobSerializer
 
 
-    @swagger_auto_schema(    operation_description="headers = {'Authorization': 'Token {token}'}", request_body=openapi.Schema(
+    @swagger_auto_schema(    operation_description="headers = {'Authorization': 'Token {token}'}  Company token", request_body=openapi.Schema(
      type=openapi.TYPE_OBJECT,
 
     properties={
@@ -76,9 +76,13 @@ class JobDetail (APIView):
      serializer_class           = JobSerializer
 
 
+     @swagger_auto_schema( operation_description="Job = job primary key",
+
+
+        responses={201: JobSerializer, 400: 'Bad Request'})
      def get(self, request, job):
 
-        context={}
+        context = {}
         job = Jobs.objects.filter(pk=job)
         if job.count() == 0:
             context['response'] = 'error'
@@ -101,8 +105,8 @@ class JobApply(APIView):
     permission_classes         = []
     serializer_class           = JobSerializer
 
-    @swagger_auto_schema(
-        request_body=openapi.Schema( operation_description="headers = {'Authorization': 'Token {token}'} User token",
+    @swagger_auto_schema(operation_description="headers = {'Authorization': 'Token {token}'} User token",
+        request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
                 'job pk': openapi.Schema(type=openapi.TYPE_STRING, description=' In url'),
