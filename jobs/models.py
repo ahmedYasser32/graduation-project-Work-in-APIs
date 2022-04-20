@@ -13,4 +13,8 @@ class Jobs(models.Model):
     salary                  =  models.CharField(max_length=10)
     isConfidential          =  models.BooleanField(default=True)
     applicants              =  models.ManyToManyField(Profile)
+    created_at              =  models.DateTimeField(auto_now_add=True,null=True)
+
+
+
 

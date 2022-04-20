@@ -113,6 +113,7 @@ class JobApply(APIView):
 
             }),
         responses={201: JobSerializer, 400: 'Bad Request'})
+
     def post(self, request, job) :
 
         context = {}
@@ -138,6 +139,35 @@ class JobApply(APIView):
 
             return Response(data=context)
 
+class JobDetail (APIView):
+
+     authentication_classes     = []
+     permission_classes         = []
+     serializer_class           = JobSerializer
+
+
+     @swagger_auto_schema( operation_description="Job = job primary key",
+
+
+        responses={201: JobSerializer, 400: 'Bad Request'})
+     def get(self, request, job):
+
+        context = {}
+        job = Jobs.objects.filter(pk=job)
+        if job.count() == 0:
+            context['response'] = 'error'
+            context['error'] = 'job doesnt exist'
+            return Response(data=context)
+
+        job_detail=job[0]
+
+
+        serializer = self.serializer_class(job_detail)
+        context= {**context,**serializer.data.copy()}
+        context['response']='success'
+        return Response(data=context)
+
+#class AppliedJobs(APIView):
 
 
 
