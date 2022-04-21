@@ -8,7 +8,7 @@ from jobs.models import Jobs
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        exclude = ['applicants']
+        exclude = ['applicants','company']
 
 
 class joblistSerializer(serializers.ModelSerializer):

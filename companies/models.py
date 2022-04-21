@@ -41,13 +41,13 @@ class CompanyProfile(models.Model):
     user               = models.OneToOneField(Account,on_delete=models.CASCADE,primary_key=True,)
     #image attribute
 
-    size_of_company    = models.CharField(max_length=25,default='SB')
+    size_of_company    = models.CharField(max_length=25,null = True)
     company_name       = models.CharField(max_length=25,null = True)
     company_info       = models.CharField(max_length=1500,null = True)
 
 
-    company_industries = models.CharField(max_length=25,default='T')
-    company_type       = models.CharField(max_length=25,default='PRV')
+    company_industries = models.CharField(max_length=25,default='T',null = True)
+    company_type       = models.CharField(max_length=25,default='PRV',null = True)
     mobile_number      = models.CharField(max_length=13,null=True)
     job_title          = models.CharField(max_length=25,null=True)
     no_of_employees    = models.CharField(max_length=9,null=True)
