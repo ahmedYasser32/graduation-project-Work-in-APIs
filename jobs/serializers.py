@@ -12,13 +12,14 @@ class JobSerializer(serializers.ModelSerializer):
 
 
 class joblistSerializer(serializers.ModelSerializer):
+
     logo = serializers.SerializerMethodField()
 
     created_at = serializers.SerializerMethodField()
 
     class Meta:
         model = Jobs
-        fields = ('logo', 'created_at',)
+        fields = ('logo', 'created_at','applicantscount','salary')
 
     def get_logo(self, job):
         return job.company.user.file.url
