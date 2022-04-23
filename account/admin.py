@@ -14,3 +14,5 @@ class AccountAdmin(admin.ModelAdmin):
 
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Profile)
+
+
