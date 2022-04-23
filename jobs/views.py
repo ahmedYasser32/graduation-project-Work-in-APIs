@@ -159,13 +159,15 @@ class CompanyJobs(APIView):
 
         else:
           context['response'] = 'error'
+          context['error_msg'] = 'invalid email'
           return Response(data=context)
 
         context['company_name'] = company.company_name
         context['company_location'] =  company.location
         jobs = Jobs.objects.filter(company=company)
         serializer = self.serializer_class(jobs,many=True)
-        context= {**context,**serializer.data.copy()}
+        #context= {**context,**serializer.data.copy()}
+        context['jobs'] = serializer.data
         context['response']='success'
         return Response(data=context)
 
