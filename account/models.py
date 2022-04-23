@@ -235,7 +235,7 @@ class Profile(models.Model):
 
 	uni = models.CharField(max_length=50,null=True)
 
-	#specialities = models.CharField(max_length=500,null=True)
+	specialities = models.CharField(max_length=500,null=True)
 
 	yearofgrad= models.PositiveSmallIntegerField(null=True,blank=True)
 
