@@ -234,7 +234,7 @@ def check_reset_password_mail(request):
 		x = (now - codes.date2).days
 
 		if x >= 1:
-			codes.foul_count -= 1
+			codes.foul_count = max(0, codes.foul_count-1)
 			codes.resend_count = 0
 			codes.block = False
 		if not codes.block:
