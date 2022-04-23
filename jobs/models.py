@@ -13,7 +13,7 @@ class Jobs(models.Model):
     career_level            =  models.CharField(max_length=20,default="Junior")
     salary                  =  models.CharField(max_length=10,null=True)
     isConfidential          =  models.BooleanField(default=True)
-    applicants              =  models.ManyToManyField(Profile)
+    applicants              =  models.ManyToManyField(Profile,blank=True)
     created_at              =  models.DateTimeField(auto_now_add=True,null=True)
     applicantscount         = models.PositiveSmallIntegerField(default=0)
 
