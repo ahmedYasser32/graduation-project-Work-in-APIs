@@ -8,7 +8,7 @@ from jobs.models import Jobs
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        exclude = ['applicants','company','applicantscount']
+        exclude = ['applicants','company','applicantscount','id']
 
 
 class joblistSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class joblistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Jobs
-        fields = ('logo', 'created_at','applicantscount','salary')
+        fields = ('logo', 'created_at','applicantscount','salary','company')
 
     def get_logo(self, job):
         return job.company.user.file.url

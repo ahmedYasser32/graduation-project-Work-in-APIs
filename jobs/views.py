@@ -19,7 +19,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser,DataAndFiles, BaseParser
 from jobs.models import Jobs
-from jobs.serializers import JobSerializer
+from jobs.serializers import JobSerializer,joblistSerializer
 
 class JobCreation(APIView):
 
@@ -141,7 +141,36 @@ class JobApply(APIView):
             return Response(data=context)
 
 
-#class AppliedJobs(APIView):
+class CompanyJobs(APIView):
+    authentication_classes     = []
+    permission_classes         = []
+    serializer_class           = joblistSerializer
+
+    def get(self, request,):
+
+        context={}
+
+        email = request.data.get('email')
+        companies = CompanyProfile.objects.filter(user__email=email)
+
+
+        if companies.count() > 0:
+            company=companies[0]
+
+        else:
+          context['response'] = 'error'
+          return Response(data=context)
+
+        context['company_name'] = company.company_name
+        context['company_location'] =  company.location
+        jobs = Jobs.objects.filter(company=company)
+        serializer = self.serializer_class(jobs,many=True)
+        context= {**context,**serializer.data.copy()}
+        context['response']='success'
+        return Response(data=context)
+
+
+
 
 
 
