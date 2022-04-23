@@ -146,11 +146,12 @@ class CompanyJobs(APIView):
     permission_classes         = []
     serializer_class           = joblistSerializer
 
-    def get(self, request,):
+    def get(self, request,email=None):
 
         context={}
 
-        email = request.data.get('email')
+        if not email:
+            email = request.data.get('email')
         companies = CompanyProfile.objects.filter(user__email=email)
 
 
