@@ -22,7 +22,9 @@ class joblistSerializer(serializers.ModelSerializer):
         fields = ('logo', 'created_at','applicantscount','salary','company')
 
     def get_logo(self, job):
-        return job.company.user.file.url
+        if job.company.user.file:
+            return job.company.user.file.url
+        return ''
 
     def get_created_at(self, job):
         return naturaltime(job.created_at)
