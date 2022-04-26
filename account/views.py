@@ -321,7 +321,7 @@ def check_reset_password_code(request, token):
 			return Response({'response':'error'})
 		if reset_password_code == codes[0].reset_password:
 			key = b'TQXelGorbDLwLdhklkXcDpySpMiW8jHuMzw3tpH-gok='
-			token = encription(token, 'e', key)
+			token = encryption(token, 'e', key)
 			data['response'] = 'success'
 			data['token'] = token
 			data['email'] = account.email
@@ -347,7 +347,7 @@ def reset_password(request, token):
 
 
 	key = b'TQXelGorbDLwLdhklkXcDpySpMiW8jHuMzw3tpH-gok='
-	token = encription(token, 'd', key)
+	token = encryption(token, 'd', key)
 	account_token = Token.objects.get(user=account).key
 	if token != account_token:
 		data['response'] = 'error'
