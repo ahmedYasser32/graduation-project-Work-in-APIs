@@ -143,8 +143,8 @@ def check_verification_mail(request):
 			return Response(data)
 
 
-		request.user.verify()
-
+		#request.user.verify()
+		account.verify()
 		data['response'] = 'success'
 		data['email'] = account.email
 		return Response(data)
