@@ -401,6 +401,8 @@ class CompanyDetailApi(APIView):
 
         context['pk'] = account.pk
         context['email'] = email.lower()
+        if account.file:
+            context['logo'] = account.file.url
         profile_created = False
         try:
             company_profile = account.companyprofile
