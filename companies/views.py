@@ -150,6 +150,7 @@ class CompanyProfileAPI(APIView):
 class Company_LoginAPI(APIView):
     authentication_classes = []
     permission_classes = []
+    serializer_class = CompanyProfileSerializer
 
     @swagger_auto_schema(request_body=openapi.Schema(
     type=openapi.TYPE_OBJECT,
@@ -377,6 +378,39 @@ class ReviewApi(APIView):
         context= {**context,**serializer.data.copy()}
         context['response']='success'
 
+
+        return Response(data=context)
+
+
+class CompanyDetailApi(APIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = CompanyProfileSerializer
+    def get(self, request, email ):
+        context = dict()
+        account = Account.objects.filter(email=email).first()
+        if not account:
+            context['response'] = 'Error'
+            context['error_message'] = 'Invalid company email'
+            return Response(data=context)
+        elif not account.is_company:
+            context['response'] = 'Error'
+            context['error_message'] = 'Invalid credentials'
+            return Response(data=context)
+
+
+        context['pk'] = account.pk
+        context['email'] = email.lower()
+        profile_created = False
+        try:
+            company_profile = account.companyprofile
+            serializer = self.serializer_class(company_profile)
+            context.update(serializer.data)
+            profile_created = True
+        except Account.companyprofile.RelatedObjectDoesNotExist:
+            pass
+
+        context['profile_created'] = profile_created
 
         return Response(data=context)
 

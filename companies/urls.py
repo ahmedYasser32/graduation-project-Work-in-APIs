@@ -10,6 +10,7 @@ urlpatterns = [
  path('Profile_setup/',CompanyProfileSetup.as_view()),
  path('upload_logo',LogoUploadView.as_view()),
  path('review/<str:company_email>',ReviewApi.as_view()),
+ path('<str:email>',CompanyDetailApi.as_view()),
 
 ]
 
