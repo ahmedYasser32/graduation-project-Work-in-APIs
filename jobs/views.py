@@ -140,6 +140,33 @@ class JobApply(APIView):
 
             return Response(data=context)
 
+class AppliedJobs(APIView):
+
+     authentication_classes     = [IsAuthenticated]
+     permission_classes         = []
+     serializer_class           = joblistSerializer
+
+     def get(self, request):
+         context = {}
+         if  request.user.is_company :
+             context['response' ] ='error'
+             context['Error']     = 'You are not allowed to access this API'
+
+         user = request.user.profile
+         jobs = Jobs.objects.filter(applicants=user)
+         serializer = self.serializer_class(jobs,many=True)
+         context['jobs'] = serializer.data
+         context['response']='success'
+         return Response(data=context)
+
+
+
+
+
+
+
+
+
 
 class CompanyJobs(APIView):
     authentication_classes     = []
@@ -152,6 +179,7 @@ class CompanyJobs(APIView):
 
         if not email:
             email = request.data.get('email')
+
         companies = CompanyProfile.objects.filter(user__email=email)
 
 
