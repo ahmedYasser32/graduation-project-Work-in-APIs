@@ -19,7 +19,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser,DataAndFiles, BaseParser
 from jobs.models import Jobs
-from jobs.serializers import JobSerializer,joblistSerializer
+from jobs.serializers import JobSerializer,joblistSerializer, CompanyJobSerializer
 
 class JobCreation(APIView):
 
@@ -98,6 +98,32 @@ class JobDetail (APIView):
         return Response(data=context)
 
 
+class CompanyJobDetail(APIView):
+    authentication_classes = []
+    permission_classes = [IsAuthenticated]
+    serializer_class = CompanyJobSerializer
+
+    def get(self, request, job):
+        context = {}
+        job = Jobs.objects.filter(pk=job).first()
+        if not job:
+            context['response'] = 'error'
+            context['error'] = "job doesn\'t exist"
+            return Response(data=context)
+        if not request.user.is_company:
+            context['response'] = 'error'
+            context['error'] = "not allowed"
+            return Response(data=context)
+
+
+
+
+        serializer = self.serializer_class(job)
+        context = {**context, **serializer.data}
+        context['response'] = 'success'
+        return Response(data=context)
+
+
 class JobApply(APIView):
 
 
@@ -142,8 +168,8 @@ class JobApply(APIView):
 
 class AppliedJobs(APIView):
 
-     authentication_classes     = [IsAuthenticated]
-     permission_classes         = []
+     authentication_classes     = []
+     permission_classes         = [IsAuthenticated]
      serializer_class           = joblistSerializer
 
      def get(self, request):
@@ -151,6 +177,7 @@ class AppliedJobs(APIView):
          if  request.user.is_company :
              context['response' ] ='error'
              context['Error']     = 'You are not allowed to access this API'
+             return Response(data=context)
 
          user = request.user.profile
          jobs = Jobs.objects.filter(applicants=user)
