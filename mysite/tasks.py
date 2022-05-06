@@ -191,11 +191,11 @@ class CVParsing(threading.Thread):
 
     def __init__(self, file):
         self.file = file
-        self.response = None
+        self.response = {}
         threading.Thread.__init__(self)
 
     def run(self):
-        token = "c66179de88e40f465ea1a25ad8c6115676bc0f5a"
+        token = "d77e5245c2dec09326e46b5239fd34036b3a0e3d"
         credential = TokenCredential(token=token)
         client = AffindaAPI(credential=credential)
         resume = client.create_resume(file=self.file.open('rb'))
