@@ -237,6 +237,8 @@ class Profile(models.Model):
 
 	specialities = models.CharField(max_length=500,null=True)
 
+	about = models.CharField(max_length=500,null=True)
+
 	yearofgrad= models.PositiveSmallIntegerField(null=True,blank=True)
 
 	gpa = models.CharField(max_length=4,null=True)

@@ -6,6 +6,7 @@ class Jobs(models.Model):
 
     company                 =  models.ForeignKey(CompanyProfile,on_delete=models.CASCADE)
     job_title               =  models.CharField(max_length=20)
+    job_category             =  models.CharField(max_length=20)
     #education_level_choices =  [("ST","Student"),("BCH","Bachelor"),("UG","UnderGrad"),("MST","Masters"),("PHD","PHD")]
     description             =  models.CharField(max_length=1000)
     requirements            =  models.CharField(max_length=1000)
