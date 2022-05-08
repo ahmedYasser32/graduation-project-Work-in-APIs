@@ -8,8 +8,10 @@ from rest_framework.response import Response
 from companies.serializers import CompanyRegistrationSerializer,CompanyProfileSerializer, LogoSerializer
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from rest_framework.decorators import *
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from companies.serializers import ReviewSereializier
@@ -362,6 +364,7 @@ class ReviewApi(APIView):
         context.update(serializer.errors)
         return Response(context)
 
+    #@permission_classes([IsAuthenticated])
     def get(self,request,company_email):
 
         company = CompanyProfile.objects.filter(user__email=company_email)
@@ -383,9 +386,12 @@ class ReviewApi(APIView):
 
 
 class CompanyDetailApi(APIView):
+
     authentication_classes = []
-    permission_classes = []
-    serializer_class = CompanyProfileSerializer
+    permission_classes     = []
+    serializer_class       = CompanyProfileSerializer
+
+
     def get(self, request, email ):
         context = dict()
         account = Account.objects.filter(email=email).first()

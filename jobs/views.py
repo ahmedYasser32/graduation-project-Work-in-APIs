@@ -168,9 +168,6 @@ class JobApply(APIView):
 
 class AppliedJobs(APIView):
 
-     authentication_classes     = []
-     permission_classes         = [IsAuthenticated]
-     serializer_class           = joblistSerializer
 
      def get(self, request):
          context = {}
@@ -188,17 +185,12 @@ class AppliedJobs(APIView):
 
 
 
-
-
-
-
-
-
-
 class CompanyJobs(APIView):
     authentication_classes     = []
     permission_classes         = []
     serializer_class           = joblistSerializer
+
+
 
     def get(self, request,email=None):
 
