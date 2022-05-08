@@ -176,7 +176,7 @@ def user_verification(request):
             return Response({'response':'error'})
 
         if verifycode == codes[0].verification_code:
-            data['token'] = token
+
             data['email'] = account.email
             account.verified = True
             account.save()
