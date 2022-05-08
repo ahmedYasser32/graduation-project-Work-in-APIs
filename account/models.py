@@ -237,7 +237,7 @@ class Profile(models.Model):
 
 
 
-	about = models.CharField(max_length=500,null=True)
+	about = models.CharField(max_length=500,null=True,blank=True)
 
 	yearofgrad= models.PositiveSmallIntegerField(null=True,blank=True)
 
