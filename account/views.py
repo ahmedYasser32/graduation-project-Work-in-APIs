@@ -156,26 +156,35 @@ def check_verification_mail(request):
 @authentication_classes([])
 @permission_classes([IsAuthenticated])
 def user_verification(request):
-	print(f'\n{request.data}')
-	data = {}
-	if request.method == 'POST':
+    print(f'\n{request.data}')
+    data = {}
+    if request.method == 'POST':
+        email = request.data.get('email').lower()
+        try:
+            account = Account.objects.get(email=email)
 
-		verifycode = request.data.get('verification_code')
+        except Account.DoesNotExist:
+            data['response'] = 'error'
+            data['error_msg'] = "Account does not exist"
+            return Response(data)
 
-		codes = AccountCode.objects.filter(user=account.pk)
-		if codes.count() == 0:
-			return Response({'response':'error'})
 
-		if verifycode == codes[0].verification_code:
-			data['token'] = token
-			data['email'] = account.email
-			account.verified = True
-			account.save()
-			return Response(data)
+        verifycode = request.data.get('verification_code')
 
-		data['response'] = 'error'
-		data['error_msg'] = 'invalid code'
-		return Response(data)
+        codes = AccountCode.objects.filter(user=account.pk)
+        if codes.count() == 0:
+            return Response({'response':'error'})
+
+        if verifycode == codes[0].verification_code:
+            data['token'] = token
+            data['email'] = account.email
+            account.verified = True
+            account.save()
+            return Response(data)
+
+        data['response'] = 'error'
+        data['error_msg'] = 'invalid code'
+        return Response(data)
 
 
 
