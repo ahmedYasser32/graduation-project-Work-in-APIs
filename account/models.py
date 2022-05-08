@@ -90,7 +90,7 @@ class Account(AbstractBaseUser):
 
 		digits = "0123456789"
 		OTP = ""
-		for i in range(4):
+		for i in range(6):
 			OTP += digits[math.floor(random.random() * 10)]
 			codes = AccountCode.objects.filter(user=self.pk)
 		if codes.count() == 0:
