@@ -33,7 +33,7 @@ class joblistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Jobs
-        fields = ('logo', 'created_at','applicantscount','salary','company','id')
+        fields = ('logo', 'created_at','applicantscount','salary','company','id','job_type')
 
     def get_logo(self, job):
         if job.company.user.file:

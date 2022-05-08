@@ -131,7 +131,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class AccountCode(models.Model):
 	user              = models.OneToOneField(Account, on_delete=models.CASCADE)
-	verification_code = models.CharField(max_length=4, null=False, blank=False)
+	verification_code = models.CharField(max_length=6, null=False, blank=False)
 	reset_password    = models.CharField(max_length=6, null=False, blank=False)
 	resend_count      = models.PositiveSmallIntegerField(default=0, blank=True)
 	date              = models.DateTimeField(blank=True, default=datetime.now)
