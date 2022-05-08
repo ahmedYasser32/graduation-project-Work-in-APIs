@@ -365,6 +365,7 @@ class ReviewApi(APIView):
         return Response(context)
 
     #@permission_classes([IsAuthenticated])
+    @swagger_auto_schema(operation_description="Company-email in url to get a list of reviews ")
     def get(self,request,company_email):
 
         company = CompanyProfile.objects.filter(user__email=company_email)
@@ -391,7 +392,7 @@ class CompanyDetailApi(APIView):
     permission_classes     = []
     serializer_class       = CompanyProfileSerializer
 
-
+    @swagger_auto_schema(operation_description="Email of the company in the url to get a company detail view")
     def get(self, request, email ):
         context = dict()
         account = Account.objects.filter(email=email).first()

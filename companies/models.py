@@ -56,7 +56,7 @@ class CompanyProfile(models.Model):
     founded_at         = models.DateTimeField(null=True)
     website            = models.CharField(max_length=100,null=True)
     location           = models.CharField(max_length=50,null=True)
-
+    specialities = models.CharField(max_length=500,null=True)
 
 
 

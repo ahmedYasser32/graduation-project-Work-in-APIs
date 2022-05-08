@@ -5,7 +5,9 @@ from account.models import Profile
 class Jobs(models.Model):
 
     company                 =  models.ForeignKey(CompanyProfile,on_delete=models.CASCADE)
-    job_title               =  models.CharField(max_length=20)
+    job_title               =  models.CharField(max_length=20,default="junior")
+    job_category            =  models.CharField(max_length=20,default="IT")
+    job_type                =  models.CharField(max_length=20,default="fulltime")
     #education_level_choices =  [("ST","Student"),("BCH","Bachelor"),("UG","UnderGrad"),("MST","Masters"),("PHD","PHD")]
     description             =  models.CharField(max_length=1000)
     requirements            =  models.CharField(max_length=1000)
