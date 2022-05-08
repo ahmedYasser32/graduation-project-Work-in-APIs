@@ -567,10 +567,7 @@ class UserDetailView(APIView):
 
     permission_classes = []
     serializer_class = UserProfileSerializer
-    @swagger_auto_schema(
-      operation_description = " headers = {'Authorization': ' Token {token}'}  Company token, and Email of the user in the url",
-
-    responses={201: serializer_class , 400 : 'Bad Request'})
+    @swagger_auto_schema(operation_description = " Email of the user in the url, return the user profile")
     def get(self, request, email):
         profile = Profile.objects.select_related('user').filter(user__email = email).first()
         if not profile:

@@ -76,10 +76,7 @@ class JobDetail (APIView):
      serializer_class           = JobSerializer
 
 
-     @swagger_auto_schema( operation_description="Job = job primary key",
-
-
-        responses={201: JobSerializer, 400: 'Bad Request'})
+     @swagger_auto_schema(operation_description="Job primarykey in the url to view the job dtail")
      def get(self, request, job):
 
         context = {}
@@ -103,6 +100,7 @@ class CompanyJobDetail(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = CompanyJobSerializer
 
+    @swagger_auto_schema(operation_description="headers = {'Authorization': 'Token {token}'} Company token, job primary key in url")
     def get(self, request, job):
         context = {}
         job = Jobs.objects.filter(pk=job).first()
@@ -168,22 +166,24 @@ class JobApply(APIView):
 
 class AppliedJobs(APIView):
 
+    authentication_classes     = [IsAuthenticated]
+    permission_classes         = []
+    serializer_class           = joblistSerializer
 
-     def get(self, request):
-
-         context = {}
-
-         if  request.user.is_company :
+    @swagger_auto_schema(operation_description="headers = {'Authorization': 'Token {token}'} User token")
+    def get(self, request):
+        context = {}
+        if  request.user.is_company :
              context['response' ] ='error'
              context['Error']     = 'You are not allowed to access this API'
              return Response(data=context)
 
-         user = request.user.profile
-         jobs = Jobs.objects.filter(applicants=user)
-         serializer = self.serializer_class(jobs,many=True)
-         context['jobs'] = serializer.data
-         context['response']='success'
-         return Response(data=context)
+        user = request.user.profile
+        jobs = Jobs.objects.filter(applicants=user)
+        serializer = self.serializer_class(jobs,many=True)
+        context['jobs'] = serializer.data
+        context['response']='success'
+        return Response(data=context)
 
 
 
@@ -193,7 +193,7 @@ class CompanyJobs(APIView):
     serializer_class           = joblistSerializer
 
 
-
+    @swagger_auto_schema(operation_description="Email of the company in the url to get a list of the jobs created by the company")
     def get(self, request,email=None):
 
         context={}
@@ -220,6 +220,45 @@ class CompanyJobs(APIView):
         context['jobs'] = serializer.data
         context['response']='success'
         return Response(data=context)
+
+
+
+
+class Homescreen(APIView):
+
+    authentication_classes     = []
+    permission_classes         = []
+    serializer_class           = joblistSerializer
+
+    def get(self, request,email=None):
+        context={}
+        #retrieve from url
+        email = request.GET.get('email')
+        account = Account.objects.filter(email=email)
+        if account.count()<0 :
+            jobs = Jobs.objects.all
+            serializer = self.serializer_class(jobs,many=True)
+            context['jobs'] = serializer.data
+            context['response']='success'
+            return Response(data=context)
+
+        account  = Account.objects.filter(email=email)
+        if account :
+            user  = account[0].Profile
+        else:
+            context['response']='error'
+            context['error_msg']='account does not exist'
+            return Response(data=context)
+        joblist = Jobs.objects.filter(job_title=user.job_title_looking_for)
+        joblist = joblist.filter(job_category=user.careers_intrests)
+       #joblist = joblist.filter(salary>=user.smin_salary)
+        joblist = joblist.filter(education_level=user.education_level)
+        # jobs.experience [1-3] in between user.years_of_experience(mostafa ayezha range w hya fldatabase int)
+        # search for skills in requirements and vice versa
+
+
+
+
 
 
 
