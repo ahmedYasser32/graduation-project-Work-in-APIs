@@ -207,7 +207,9 @@ class CVParsing(threading.Thread):
     def join_with_return(self):
 
         self.join()
-        return self.response
+        if self.response:
+            return self.response
+        else: return {}
 
 
 
