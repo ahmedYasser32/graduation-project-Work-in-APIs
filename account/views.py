@@ -36,6 +36,7 @@ class RegisterAPI(APIView):
         'password': openapi.Schema(type=openapi.TYPE_STRING  , description='password')
      }),
      responses={200: RegistrationSerializer, 400 : 'Bad Request'})
+
     def post(self, request, *args, **kwargs):
         print(f'\n{request.data}')
         print(request.data.get('email'))
