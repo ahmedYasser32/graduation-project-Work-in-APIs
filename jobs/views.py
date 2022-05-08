@@ -170,7 +170,9 @@ class AppliedJobs(APIView):
 
 
      def get(self, request):
+
          context = {}
+
          if  request.user.is_company :
              context['response' ] ='error'
              context['Error']     = 'You are not allowed to access this API'
