@@ -1,3 +1,5 @@
+
+from django.db.models import Case, When, Q
 from mysite.tasks import CVParsing
 from rest_framework import status
 from account.models import Account,AccountCode,Profile
@@ -224,7 +226,7 @@ class CompanyJobs(APIView):
 
 
 
-class Homescreen(APIView):
+class HomeScreen(APIView):
 
     authentication_classes     = []
     permission_classes         = []
@@ -235,24 +237,39 @@ class Homescreen(APIView):
         #retrieve from url
         email = request.GET.get('email')
         account = Account.objects.filter(email=email)
-        if account.count()<0 :
-            jobs = Jobs.objects.all
+        if account.count()==0 :
+            jobs = Jobs.objects.all()
             serializer = self.serializer_class(jobs,many=True)
             context['jobs'] = serializer.data
             context['response']='success'
             return Response(data=context)
 
-        account  = Account.objects.filter(email=email)
+        #account  = Account.objects.filter(email=email)
         if account :
-            user  = account[0].Profile
+            user  = account[0].profile
         else:
             context['response']='error'
             context['error_msg']='account does not exist'
             return Response(data=context)
-        joblist = Jobs.objects.filter(job_title=user.job_title_looking_for)
-        joblist = joblist.filter(job_category=user.careers_intrests)
+        joblist = Jobs.objects.annotate(
+            sort_order=Case(
+                When(Q(job_title=user.job_title_looking_for),
+                then=('created_at')),
+                default=None
+            )
+        ).order_by(
+            '-sort_order',
+            '-created_at'
+        )
+        
+        serializer = self.serializer_class(joblist, many=True)
+        context['jobs'] = serializer.data
+        context['response'] = 'success'
+        return Response(data=context)
+        #joblist = Jobs.objects.filter(job_title=user.job_title_looking_for)
+        #joblist = joblist.filter(job_category=user.careers_intrests)
        #joblist = joblist.filter(salary>=user.smin_salary)
-        joblist = joblist.filter(education_level=user.education_level)
+        #joblist = joblist.filter(education_level=user.education_level)
         # jobs.experience [1-3] in between user.years_of_experience(mostafa ayezha range w hya fldatabase int)
         # search for skills in requirements and vice versa
 

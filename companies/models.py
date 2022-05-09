@@ -67,7 +67,7 @@ class CompanyProfile(models.Model):
         max_length=(6 * 11)  # 6 * 10 character nominals, plus commas
     )
 """
-
+"""
     def clean(self):
         if not bool(re.fullmatch('[A-Za-z]{2,25}( [A-Za-z]{2,25})?',self.job_title)):
              raise ValidationError({'job_title': "names must not contain digits!"})
@@ -82,7 +82,7 @@ class CompanyProfile(models.Model):
         if not bool(re.fullmatch('/^\d[\d+]*$',self.mobile_number)):
              raise ValidationError({'mobile_number': "only numbers are allowed!"})
 
-
+"""
 
 
 class Review(models.Model) :
