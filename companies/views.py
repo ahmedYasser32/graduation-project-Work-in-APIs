@@ -305,13 +305,14 @@ class LogoUploadView(APIView):
         file_serializer = LogoSerializer(account ,data=context)
 
         if file_serializer.is_valid():
+            context = {}
             account = file_serializer.save()
             if account.file:
                 context['logo'] = account.file.url
             else: context['logo'] = ''
 
             context['response']    = "Success"
-            return Response(context, status=status.HTTP_201_CREATED)
+            return Response(data= context, status=status.HTTP_201_CREATED)
         else:
             return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
