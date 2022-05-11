@@ -35,9 +35,9 @@ class LogoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['logo']
-    def get_logo(self, job):
-        if job.company.user.file:
-            return job.company.user.file.url
+    def get_logo(self, account):
+        if account.file:
+            return account.file.url
         return ''
 
 
