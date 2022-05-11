@@ -316,7 +316,7 @@ class HomeScreen(APIView):
         context['jobs'] = serializer.data
         context['response'] = 'success'
         return Response(data=context)
-
+"""
     class RecommendedUsers(APIView):
          authentication_classes     = [IsAuthenticated]
          permission_classes         = []
@@ -344,7 +344,7 @@ class HomeScreen(APIView):
          userslist = Profile.objects.annotate()
 
 
-
+"""
 
 
 
