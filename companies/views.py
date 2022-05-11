@@ -370,7 +370,12 @@ class ReviewApi(APIView):
         context.update(serializer.errors)
         return Response(context)
 
-    @permission_classes((AllowAny, ))
+class Reviewlist(APIView):
+
+    #authentication_classes     = []
+    permission_classes         = []
+    serializer_class           = ReviewSereializier
+
     @swagger_auto_schema(operation_description="Company-email in url to get a list of reviews ")
     def get(self,request,company_email):
 

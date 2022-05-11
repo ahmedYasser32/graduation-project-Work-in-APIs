@@ -77,7 +77,7 @@ class JobDetail (APIView):
      serializer_class           = JobSerializer
 
 
-     @swagger_auto_schema(operation_description="Job primarykey in the url to view the job dtail")
+     @swagger_auto_schema(operation_description="Job primarykey in the url to view the job detail")
      def get(self, request, job):
 
         context = {}
@@ -322,9 +322,24 @@ class HomeScreen(APIView):
          permission_classes         = []
          serializer_class           = ApplicantSerializer
 
-
+         @swagger_auto_schema(operation_description=" I want the job id in the url ?job_id=\" ",
+          responses={201: joblistSerializer, 400: 'Bad Request'})
          def get(self, requests):
              context={}
+             jobs = Jobs.objects.filter(pk=job)
+             if job.count() == 0:
+                 context['response'] = 'error'
+                 context['error'] = 'job doesnt exist'
+
+                 return Response(data=context)
+
+         job = job[0]
+
+         userslist = Profile.objects.annotate()
+
+
+
+
 
 
 
