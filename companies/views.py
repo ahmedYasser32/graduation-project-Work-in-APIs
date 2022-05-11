@@ -382,16 +382,16 @@ class Reviewlist(APIView):
 
         company = CompanyProfile.objects.filter(user__email=company_email)
         if company.count() > 0:
-          context['company'] = company[0]
+          context['company'] = company[0].id
 
         else:
           context['response'] = 'error'
           context['error'] = 'mail does not exist'
           return Response(data=context)
 
-        reviews = Review.objects.filter(company=company)
+        reviews = Review.objects.filter(company=company[0])
         serializer = self.serializer_class(reviews,many=True)
-        context= {**context,**serializer.data.copy()}
+        context['reviews']=serializer.data
         context['response']='success'
 
         print("context :", context)
