@@ -382,7 +382,7 @@ class Reviewlist(APIView):
 
         company = CompanyProfile.objects.filter(user__email=company_email)
         if company.count() > 0:
-          context['company'] = company[0].id
+          context['company'] = company[0].pk
 
         else:
           context['response'] = 'error'
