@@ -284,25 +284,25 @@ class HomeScreen(APIView):
             second_q=Case(
                 When(Q(job_category__icontains=user.careers_intrests) & Q(career_level__icontains=user.career_level)&
                      Q(job_title__icontains=user.job_title_looking_for)& Q(job_title__icontains=user.job_title_looking_for)
-                &Q(education_level__icontains=user.education_level ) & Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
+                &Q(education_level__icontains=user.education_level ) & Q(requirements__icontains=user.skills) | Q(salary__gte=user.min_salary)
 
             )),
             third_q=Case(
                 When(Q(job_category__icontains=user.careers_intrests)  & Q(career_level__icontains=user.career_level)&  Q(job_title__icontains=user.job_title_looking_for)
-                &Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
+                &Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__gte=user.min_salary)
 
             )),fourth_q=Case(
                 When(Q(job_category__icontains=user.careers_intrests)  & Q(career_level__icontains=user.career_level)&  Q(job_title__icontains=user.job_title_looking_for)
-                |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
+                |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__gte=user.min_salary)
 
             )),fifth_q=Case(
                 When(Q(job_category__icontains=user.careers_intrests)  & Q(career_level__icontains=user.career_level) | Q(job_title__icontains=user.job_title_looking_for)
-                |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
+                |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__gte=user.min_salary)
 
             )
             ),sixth_q=Case(
                 When(Q(job_category__icontains=user.careers_intrests) | Q(career_level__icontains=user.career_level) | Q(job_title__icontains=user.job_title_looking_for)
-                |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
+                |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__gte=user.min_salary)
 
             )
                     )
@@ -320,7 +320,7 @@ class HomeScreen(APIView):
     class RecommendedUsers(APIView):
          authentication_classes     = [IsAuthenticated]
          permission_classes         = []
-         serializer_class           = ApplicantSerializer
+         #serializer_class           = ApplicantSerializer
 
          @swagger_auto_schema(operation_description=" I want the job id in the url ?job_id=\" ",
           responses={201: joblistSerializer, 400: 'Bad Request'})
@@ -334,6 +334,12 @@ class HomeScreen(APIView):
                  return Response(data=context)
 
          job = job[0]
+         q1 = Q(careers_intrests__icontains=job.job_category)
+         q2 = Q(career_level__icontains=job.career_level)
+         q3 = Q(job_title_looking_for__icontains=job.job_title)
+         q4 = Q(education_level__icontains=job.education_level )
+         q5 = Q(skills__icontains=job.requirements)
+         q6 = Q(min_salary__lte=job.salary)
 
          userslist = Profile.objects.annotate()
 
