@@ -232,7 +232,7 @@ class HomeScreen(APIView):
     permission_classes         = []
     serializer_class           = joblistSerializer
 
-    @swagger_auto_schema(operation_description="Home Screen, in the url ?email="" and ?filter= to filter categories",
+    @swagger_auto_schema(operation_description="Home Screen, in the url ?email=\"\" and ?filter= to filter categories",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             ),
