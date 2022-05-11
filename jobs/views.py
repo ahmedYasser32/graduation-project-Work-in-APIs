@@ -233,9 +233,6 @@ class HomeScreen(APIView):
     serializer_class           = joblistSerializer
 
     @swagger_auto_schema(operation_description="Home Screen, in the url ?email=\"\" and ?filter= to filter categories",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            ),
         responses={201: joblistSerializer, 400: 'Bad Request'})
     def get(self, requests):
         context={}
