@@ -378,6 +378,7 @@ class Reviewlist(APIView):
 
     @swagger_auto_schema(operation_description="Company-email in url to get a list of reviews ")
     def get(self,request,company_email):
+        context={}
 
         company = CompanyProfile.objects.filter(user__email=company_email)
         if company.count() > 0:
@@ -393,7 +394,7 @@ class Reviewlist(APIView):
         context= {**context,**serializer.data.copy()}
         context['response']='success'
 
-
+        print("context :", context)
         return Response(data=context)
 
 
