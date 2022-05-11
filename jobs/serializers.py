@@ -5,9 +5,9 @@ from account.models import Profile
 from jobs.models import Jobs
 
 class ApplicantSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(source='user.email')
+    email     = serializers.CharField(source='user.email')
     firstname = serializers.CharField(source='user.firstname')
-    lastname = serializers.CharField(source='user.lastname')
+    lastname  = serializers.CharField(source='user.lastname')
     class Meta:
         model = Profile
         fields = ('email', 'firstname', 'lastname')

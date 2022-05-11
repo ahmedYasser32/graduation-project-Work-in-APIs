@@ -275,26 +275,33 @@ class HomeScreen(APIView):
 
             first_query=Case(
 
-                When(Q(job_category__icontains=user.careers_intrests) & Q(job_title__icontains=user.job_title_looking_for)
+                When(Q(job_category__icontains=user.careers_intrests) & Q(career_level__icontains=user.career_level)&
+                     Q(job_title__icontains=user.job_title_looking_for)
                 &Q(education_level__icontains=user.education_level ) & Q(requirements__icontains=user.skills) & Q(salary__bte=user.min_salary),
                 then=('created_at')),
                 default=None
             ),
             second_q=Case(
-                When(Q(job_category__icontains=user.careers_intrests) & Q(job_title__icontains=user.job_title_looking_for)
+                When(Q(job_category__icontains=user.careers_intrests) & Q(career_level__icontains=user.career_level)&
+                     Q(job_title__icontains=user.job_title_looking_for)& Q(job_title__icontains=user.job_title_looking_for)
                 &Q(education_level__icontains=user.education_level ) & Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
 
             )),
             third_q=Case(
-                When(Q(job_category__icontains=user.careers_intrests) & Q(job_title__icontains=user.job_title_looking_for)
+                When(Q(job_category__icontains=user.careers_intrests)  & Q(career_level__icontains=user.career_level)&  Q(job_title__icontains=user.job_title_looking_for)
                 &Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
 
             )),fourth_q=Case(
-                When(Q(job_category__icontains=user.careers_intrests) & Q(job_title__icontains=user.job_title_looking_for)
+                When(Q(job_category__icontains=user.careers_intrests)  & Q(career_level__icontains=user.career_level)&  Q(job_title__icontains=user.job_title_looking_for)
                 |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
 
             )),fifth_q=Case(
-                When(Q(job_category__icontains=user.careers_intrests) | Q(job_title__icontains=user.job_title_looking_for)
+                When(Q(job_category__icontains=user.careers_intrests)  & Q(career_level__icontains=user.career_level) | Q(job_title__icontains=user.job_title_looking_for)
+                |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
+
+            )
+            ),sixth_q=Case(
+                When(Q(job_category__icontains=user.careers_intrests) | Q(career_level__icontains=user.career_level) | Q(job_title__icontains=user.job_title_looking_for)
                 |Q(education_level__icontains=user.education_level ) | Q(requirements__icontains=user.skills) | Q(salary__bte=user.min_salary)
 
             )
@@ -309,6 +316,16 @@ class HomeScreen(APIView):
         context['jobs'] = serializer.data
         context['response'] = 'success'
         return Response(data=context)
+
+    class RecommendedUsers(APIView):
+         authentication_classes     = [IsAuthenticated]
+         permission_classes         = []
+         serializer_class           = ApplicantSerializer
+
+
+         def get(self, requests):
+             context={}
+
 
 
 
