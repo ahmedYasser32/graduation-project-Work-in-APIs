@@ -20,7 +20,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser,DataAndFiles, BaseParser
 from jobs.models import Jobs
-from jobs.serializers import JobSerializer,joblistSerializer, CompanyJobSerializer
+from jobs.serializers import *
 
 class JobCreation(APIView):
 
@@ -316,11 +316,11 @@ class HomeScreen(APIView):
         context['jobs'] = serializer.data
         context['response'] = 'success'
         return Response(data=context)
-"""
+
     class RecommendedUsers(APIView):
          authentication_classes     = [IsAuthenticated]
          permission_classes         = []
-         #serializer_class           = ApplicantSerializer
+         serializer_class           = ApplicantSerializer
 
          @swagger_auto_schema(operation_description=" I want the job id in the url ?job_id=\" ",
           responses={201: joblistSerializer, 400: 'Bad Request'})
@@ -341,10 +341,37 @@ class HomeScreen(APIView):
          q5 = Q(skills__icontains=job.requirements)
          q6 = Q(min_salary__lte=job.salary)
 
-         userslist = Profile.objects.annotate()
+         userslist = Profile.objects.annotate( first_query=Case(
+
+                When(q1&q2&q3&q4&q5&q6)
+            ),
+            second_q=Case(
+                When(q1&q2&q3&q4&q5|q6)
+
+            ),
+            third_q=Case(
+                When(q1&q2&q3&q4|q5|q6)
+            ),fourth_q=Case(
+               When(q1&q2&q3|q4|q5|q6))
+
+            ,
+             fifth_q=Case(
+                 When(q1&q2|q3|q4|q5|q6))
 
 
-"""
+            ,sixth_q=Case(
+                 When(q1|q2|q3|q4|q5|q6)
+             )
+
+
+
+        ).order_by(
+             '-first_query',  '-second_q', '-third_q','-fourth_q','-fifth_q',
+            '-sixth_q'
+        )
+
+
+
 
 
 
