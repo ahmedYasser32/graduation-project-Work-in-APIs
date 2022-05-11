@@ -31,15 +31,9 @@ class CompanyProfileSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 class LogoSerializer(serializers.ModelSerializer):
-    logo = serializers.SerializerMethodField()
     class Meta:
         model = Account
-        fields = ['logo']
-    def get_logo(self, account):
-        if account.file:
-            return account.file.url
-        return ''
-
+        fields = ['file']
 
 class ReviewSereializier(serializers.ModelSerializer):
 	class Meta :

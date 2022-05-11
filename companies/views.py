@@ -187,7 +187,10 @@ class Company_LoginAPI(APIView):
                 pass
 
             context['profile_created'] = profile_created
-
+            if account.file:
+                context['logo'] = account.file.url
+            else: context['logo'] = ''
+            return ''
 
             return Response(data=context)
 
@@ -303,8 +306,11 @@ class LogoUploadView(APIView):
         file_serializer = LogoSerializer(account ,data=context)
 
         if file_serializer.is_valid():
-            file_serializer.save()
-            context= {**context,**file_serializer.data.copy()}
+            account = file_serializer.save()
+            if account.file:
+                context['logo'] = account.file.url
+            else: context['logo'] = ''
+
             context['response']    = "Success"
             return Response(context, status=status.HTTP_201_CREATED)
         else:
