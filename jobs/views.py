@@ -42,6 +42,7 @@ class JobCreation(APIView):
     def post(self, request, *args, **kwargs):
 
 
+        context = {}
         if not request.user.is_company:
             context['response'] = 'error'
             context['error'] = 'you are not allowed to access this API'
