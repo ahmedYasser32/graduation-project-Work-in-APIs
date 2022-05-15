@@ -25,6 +25,7 @@ class JobSerializer(serializers.ModelSerializer):
         exclude = ['applicants','applicantscount', 'company']
 
 
+
 class joblistSerializer(serializers.ModelSerializer):
 
     logo = serializers.SerializerMethodField()
