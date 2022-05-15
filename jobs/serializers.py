@@ -22,7 +22,7 @@ class CompanyJobSerializer(serializers.ModelSerializer):
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        exclude = ['applicants','company','applicantscount']
+        exclude = ['applicants','applicantscount']
 
 
 class joblistSerializer(serializers.ModelSerializer):
