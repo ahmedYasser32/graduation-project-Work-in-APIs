@@ -51,7 +51,7 @@ class JobCreation(APIView):
 
 
         data = request.data.copy()
-        data['company_id'] = request.user.companyprofile.pk
+        data['company'] = request.user.companyprofile
         #set relation
         serializer = self.serializer_class(data=data)
 
