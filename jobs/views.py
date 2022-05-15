@@ -1,3 +1,4 @@
+from rest_framework.authentication import TokenAuthentication
 from django.db.models import Case, When, Q
 from mysite.tasks import CVParsing
 from rest_framework import status
@@ -24,7 +25,7 @@ from jobs.serializers import *
 
 class JobCreation(APIView):
 
-    authentication_classes     = []
+    authentication_classes     = [TokenAuthentication,]
     permission_classes         = [IsAuthenticated]
     serializer_class           = JobSerializer
 

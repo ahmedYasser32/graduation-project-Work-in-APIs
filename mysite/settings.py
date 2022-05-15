@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'account',
     'companies',
     'rest_framework',
-'rest_framework.authtoken',
-   'drf_yasg',
+    'rest_framework.authtoken',
+    'drf_yasg',
     'jobs',
 
 ]
