@@ -11,5 +11,7 @@ urlpatterns = [
  path('company_jobs/<str:email>',CompanyJobs.as_view()),
  path('user_jobs',AppliedJobs.as_view()),
  path('home_screen/',HomeScreen.as_view()),
+ path('recommended_users/<int:job>',users_recommended.as_view()),
+ path('SendEmail/',SendMail.as_view()),
 
 ]

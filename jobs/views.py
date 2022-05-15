@@ -317,14 +317,14 @@ class HomeScreen(APIView):
         context['response'] = 'success'
         return Response(data=context)
 
-    class RecommendedUsers(APIView):
-         authentication_classes     = [IsAuthenticated]
-         permission_classes         = []
+class users_recommended(APIView):
+         authentication_classes     = []
+         permission_classes         = [IsAuthenticated]
          serializer_class           = ApplicantSerializer
 
          @swagger_auto_schema(operation_description=" I want the job id in the url ?job_id=\" ",
           responses={201: joblistSerializer, 400: 'Bad Request'})
-         def get(self, requests):
+         def get(self, request,job):
              context={}
              jobs = Jobs.objects.filter(pk=job)
              if job.count() == 0:
@@ -333,42 +333,92 @@ class HomeScreen(APIView):
 
                  return Response(data=context)
 
-         job = job[0]
-         q1 = Q(careers_intrests__icontains=job.job_category)
-         q2 = Q(career_level__icontains=job.career_level)
-         q3 = Q(job_title_looking_for__icontains=job.job_title)
-         q4 = Q(education_level__icontains=job.education_level )
-         q5 = Q(skills__icontains=job.requirements)
-         q6 = Q(min_salary__lte=job.salary)
+                 job = jobs[0]
+             q1 = Q(careers_intrests__icontains=job.job_category)
+             q2 = Q(career_level__icontains=job.career_level)
+             q3 = Q(job_title_looking_for__icontains=job.job_title)
+             q4 = Q(education_level__icontains=job.education_level )
+             q5 = Q(skills__icontains=job.requirements)
+             q6 = Q(min_salary__lte=job.salary)
 
-         userslist = Profile.objects.annotate( first_query=Case(
+             userslist = Profile.objects.annotate( first_query=Case(
 
                 When(q1&q2&q3&q4&q5&q6)
-            ),
-            second_q=Case(
+                  ),
+                second_q=Case(
                 When(q1&q2&q3&q4&q5|q6)
 
-            ),
-            third_q=Case(
-                When(q1&q2&q3&q4|q5|q6)
-            ),fourth_q=Case(
-               When(q1&q2&q3|q4|q5|q6))
+                ),
+               third_q=Case(
+                  When(q1&q2&q3&q4|q5|q6)
+               ) ,fourth_q=Case(
+                 When(q1&q2&q3|q4|q5|q6))
+                 ,
+              fifth_q=Case(
+              When(q1&q2|q3|q4|q5|q6))
 
-            ,
-             fifth_q=Case(
-                 When(q1&q2|q3|q4|q5|q6))
 
-
-            ,sixth_q=Case(
+               ,sixth_q=Case(
                  When(q1|q2|q3|q4|q5|q6)
-             )
-
-
-
-        ).order_by(
+               )
+              ).order_by(
              '-first_query',  '-second_q', '-third_q','-fourth_q','-fifth_q',
-            '-sixth_q'
-        )
+              '-sixth_q')
+
+             serializer = self.serializer_class(userslist, many=True)
+             context['users'] = serializer.data
+             context['response'] = 'success'
+             return Response(data=context)
+
+
+
+
+class SendMail(APIView):
+
+        authentication_classes     = []
+        permission_classes         = [IsAuthenticated]
+
+        @swagger_auto_schema(operation_description="headers = {'Authorization': 'Token {token}'} Company token",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'job': openapi.Schema(type=openapi.TYPE_STRING, description=' job primary key'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description=' user email'),
+                'operation': openapi.Schema(type=openapi.TYPE_STRING, description=' send it as (Accepted or short or reject'),
+
+            }),
+        responses={201: JobSerializer, 400: 'Bad Request'})
+        def post(self,request):
+
+            email     = request.data.get('email')
+            jobpk     = request.data.get('job')
+            job       = Jobs.objects.filter(pk=jobpk)
+            account      = Account.objects.filter(email=email)
+            company   = request.user.companyprofile.company_name
+            operation = request.data.get('operation')
+
+            if operation =='Accepted':
+
+                body = f'Congratulations {account.firstname} !, your application have been accepted in the {job.job_title} job from company' \
+                          f' {company} and you will be contacted for the next step soon by them and remember keep workin  ' \
+                       f'From Work-in Team ! '
+                subject = f'{job.job_title} at {company} application status'
+                SendMail(subject,body, email).start()
+
+            elif  operation =='short':
+                body = f'Congratulations {account.firstname} !, your application have been shortlisted in the {job.job_title} job from company' \
+                          f' {company} and you will be contacted for the next step soon by them, and remember keep workin' \
+                       f'From Work-in Team ! '
+                subject = f'{job.job_title} at {company} application status'
+                SendMail(subject,body, email).start()
+
+            elif  operation =='reject':
+                body = f'hello {account.firstname} ,we are sorry to inform you that  your application have been rejected in the {job.job_title} job from company' \
+                          f' {company} and we hope we find your next job soon in work-in!  '
+                subject = f'{job.job_title} at {company} application status'
+                SendMail(subject,body, email).start()
+
+
 
 
 
